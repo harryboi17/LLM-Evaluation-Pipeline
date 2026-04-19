@@ -27,6 +27,17 @@ class Settings(BaseSettings):
         vllm_timeout_s: Per-request timeout in seconds.
         vllm_max_retries: Max retries for transient network errors (capped).
         vllm_api_key: Bearer token for the vLLM OpenAI endpoint (``EMPTY`` by default).
+        vllm_max_model_len: Override the model's max sequence length. ``None``
+            uses the model's own config value.
+        vllm_dtype: Precision for model weights / activations. ``auto`` lets vLLM
+            pick; ``float16`` / ``bfloat16`` / ``float32`` force a specific dtype.
+        vllm_gpu_memory_utilization: Fraction of free GPU memory vLLM is allowed
+            to allocate (0.0-1.0).
+        vllm_tensor_parallel_size: Number of GPUs for tensor-parallel sharding.
+        vllm_max_num_seqs: Max concurrent sequences per step (``None`` = vLLM default).
+        vllm_trust_remote_code: Pass ``--trust-remote-code`` to vLLM; only enable
+            for models whose HF repo you have audited.
+        vllm_download_dir: Override the HuggingFace download cache directory.
         cache_dir: Directory for the SQLite prompt cache and other on-disk state.
         results_dir: Directory for benchmark outputs.
         log_level: ``structlog`` / stdlib log level (``INFO`` by default).
@@ -51,6 +62,15 @@ class Settings(BaseSettings):
     vllm_timeout_s: float = 120.0
     vllm_max_retries: int = 3
     vllm_api_key: str = "EMPTY"
+
+    # --- vLLM server tunables ---
+    vllm_max_model_len: int | None = None
+    vllm_dtype: Literal["auto", "float16", "bfloat16", "float32"] = "auto"
+    vllm_gpu_memory_utilization: float = 0.9
+    vllm_tensor_parallel_size: int = 1
+    vllm_max_num_seqs: int | None = None
+    vllm_trust_remote_code: bool = False
+    vllm_download_dir: Path | None = None
 
     # --- Paths ---
     cache_dir: Path = Field(default_factory=lambda: Path(".cache"))
