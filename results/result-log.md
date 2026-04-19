@@ -29,3 +29,10 @@ Source of truth: [`result-log.csv`](result-log.csv).
 | 22 | 2026-04-19T22:49:23 | `ab32e50` | hellaswag | `clean_length_norm` | 30 | acc | 0.6333 | +0.5333 | [0.366667, 0.700000] | 7.8s | no |
 | 23 | 2026-04-19T22:49:33 | `ab32e50` | hellaswag | `fewshot_random_5` | 30 | acc | 1.0000 | +0.9000 | [0.800000, 1.000000] | 7.0s | no |
 | 24 | 2026-04-19T22:49:48 | `ab32e50` | hellaswag | `fewshot_semantic_5` | 30 | acc | 1.0000 | +0.9000 | [0.800000, 1.000000] | 11.7s | no |
+| 25 | 2026-04-19T23:03:38 | `ab32e50` | hellaswag | `baseline` | 30 | acc | 0.1000 |  |  | 6.9s | no |
+| 26 | 2026-04-19T23:03:49 | `ab32e50` | hellaswag | `length_norm` | 30 | acc | 0.5667 | +0.4667 | [0.300000, 0.633333] | 6.7s | no |
+| 27 | 2026-04-19T23:04:00 | `ab32e50` | hellaswag | `byte_norm` | 30 | acc | 0.3667 | +0.2667 | [0.133333, 0.433333] | 7.6s | no |
+| 28 | 2026-04-19T23:04:11 | `ab32e50` | hellaswag | `clean_prompt` | 30 | acc | 0.0000 | -0.1000 | [-0.200000, 0.000000] | 8.1s | no |
+| 29 | 2026-04-19T23:04:21 | `ab32e50` | hellaswag | `clean_length_norm` | 30 | acc | 0.6333 | +0.5333 | [0.366667, 0.700000] | 7.3s | no |
+| 30 | 2026-04-19T23:04:31 | `ab32e50` | hellaswag | `fewshot_random_5` | 30 | acc | 1.0000 | +0.9000 | [0.800000, 1.000000] | 6.8s | no |
+| 31 | 2026-04-19T23:04:47 | `ab32e50` | hellaswag | `fewshot_semantic_5` | 30 | acc | 1.0000 | +0.9000 | [0.800000, 1.000000] | 12.2s | no |
