@@ -341,14 +341,6 @@ explains the story behind them.
 =======
 
 ## baseline — hellaswag
-- **When:** 2026-04-19T22:08+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 0.1000
-=======
-
-## baseline — hellaswag
 - **When:** 2026-04-19T22:05+00:00
 - **Commit:** `ab32e50`
 - **Task / limit / seed:** hellaswag / 3 / 42
@@ -364,88 +356,6 @@ explains the story behind them.
 - **Notes:** ablation run via improve/eval.sh
 
 ## length_norm — hellaswag
-- **When:** 2026-04-19T22:08+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 0.5667
-- **Delta vs baseline:** +0.4667
-- **95% CI (paired bootstrap, 10k):** [+0.3000, +0.6333]
-- **Two-sided p-value:** 0.0000
-- **Significance:** significantly better (95% CI > 0)
-- **Wall time:** 8.6s
-- **Notes:** ablation run via improve/eval.sh
-
-## byte_norm — hellaswag
-- **When:** 2026-04-19T22:08+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 0.3667
-- **Delta vs baseline:** +0.2667
-- **95% CI (paired bootstrap, 10k):** [+0.1333, +0.4333]
-- **Two-sided p-value:** 0.0000
-- **Significance:** significantly better (95% CI > 0)
-- **Wall time:** 7.2s
-- **Notes:** ablation run via improve/eval.sh
-
-## clean_prompt — hellaswag
-- **When:** 2026-04-19T22:08+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 0.0000
-- **Delta vs baseline:** -0.1000
-- **95% CI (paired bootstrap, 10k):** [-0.2000, +0.0000]
-- **Two-sided p-value:** 0.0822
-- **Significance:** not significant (95% CI includes 0)
-- **Wall time:** 9.8s
-- **Notes:** ablation run via improve/eval.sh
-
-## clean_length_norm — hellaswag
-- **When:** 2026-04-19T22:08+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 0.6333
-- **Delta vs baseline:** +0.5333
-- **95% CI (paired bootstrap, 10k):** [+0.3667, +0.7000]
-- **Two-sided p-value:** 0.0000
-- **Significance:** significantly better (95% CI > 0)
-- **Wall time:** 6.8s
-- **Notes:** ablation run via improve/eval.sh
-
-## fewshot_random_5 — hellaswag
-- **When:** 2026-04-19T22:09+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 1.0000
-- **Delta vs baseline:** +0.9000
-- **95% CI (paired bootstrap, 10k):** [+0.8000, +1.0000]
-- **Two-sided p-value:** 0.0000
-- **Significance:** significantly better (95% CI > 0)
-- **Wall time:** 13.4s
-- **Notes:** ablation run via improve/eval.sh
-
-## fewshot_semantic_5 — hellaswag
-- **When:** 2026-04-19T22:09+00:00
-- **Commit:** `ab32e50`
-- **Task / limit / seed:** hellaswag / 30 / 42
-- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
-- **Accuracy:** 1.0000
-- **Delta vs baseline:** +0.9000
-- **95% CI (paired bootstrap, 10k):** [+0.8000, +1.0000]
-- **Two-sided p-value:** 0.0000
-- **Significance:** significantly better (95% CI > 0)
-- **Wall time:** 21.3s
-- **Notes:** ablation run via improve/eval.sh
->>>>>>> Stashed changes
-=======
-- **Wall time:** 0.1s
-- **Notes:** (none)
-
-## length_norm — hellaswag
 - **When:** 2026-04-19T22:05+00:00
 - **Commit:** `ab32e50`
 - **Task / limit / seed:** hellaswag / 3 / 42
@@ -458,3 +368,29 @@ explains the story behind them.
 - **Wall time:** 0.0s
 - **Notes:** length-normalised scoring
 >>>>>>> Stashed changes
+
+## baseline — hellaswag
+- **When:** 2026-04-19T22:45+00:00
+- **Commit:** `2409c7d`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** n/a (baseline)
+- **95% CI (paired bootstrap, 10k):** n/a (baseline)
+- **Two-sided p-value:** n/a (baseline)
+- **Significance:** n/a (baseline)
+- **Wall time:** 0.1s
+- **Notes:** (none)
+
+## length_norm — hellaswag
+- **When:** 2026-04-19T22:45+00:00
+- **Commit:** `2409c7d`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** +0.0000
+- **95% CI (paired bootstrap, 10k):** [-1.0000, +1.0000]
+- **Two-sided p-value:** 1.0000
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 0.0s
+- **Notes:** length-normalised scoring

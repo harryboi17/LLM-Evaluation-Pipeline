@@ -37,14 +37,29 @@ VARIANTS=(
 )
 
 echo "[improve] preparing data (n_eval=$N_EVAL, n_pool=$N_POOL)"
-if [ ! -f results/improve/hellaswag_eval.jsonl ] || [ ! -f results/improve/hellaswag_fewshot_pool.jsonl ]; then
+# Always re-prepare. The previous "skip if files exist" shortcut silently
+# let a stale / synthetic dataset leak into a real run (see git history);
+# regenerating is cheap (a few MB HF download) and ensures every run scores
+# against the committed HellaSwag validation split. If you need offline
+# reruns, set IMPROVE_SKIP_PREPARE=1 explicitly.
+if [ "${IMPROVE_SKIP_PREPARE:-0}" = "1" ] && [ -f results/improve/hellaswag_eval.jsonl ] \
+    && [ -f results/improve/hellaswag_fewshot_pool.jsonl ]; then
+    echo "[improve] IMPROVE_SKIP_PREPARE=1: reusing existing eval/pool JSONL"
+    # Safety sniff: if the first example id starts with 'syn-' the files are
+    # smoke data, not real HellaSwag. Abort loudly rather than produce bogus
+    # numbers.
+    if head -1 results/improve/hellaswag_eval.jsonl | grep -q '"ind": "syn-'; then
+        echo "[improve] ERROR: eval JSONL looks synthetic (syn-* indices)."
+        echo "[improve] Delete results/improve/hellaswag_*.jsonl and rerun without IMPROVE_SKIP_PREPARE=1."
+        exit 3
+    fi
+else
+    rm -f results/improve/hellaswag_eval.jsonl results/improve/hellaswag_fewshot_pool.jsonl
     uv run python -m improve.prepare_data --n-eval "$N_EVAL" --n-pool "$N_POOL" \
         || {
             echo "[improve] dataset prep failed - is 'datasets' installed? Run: uv sync --extra eval --extra improve"
             exit 2
         }
-else
-    echo "[improve] reusing existing results/improve/hellaswag_{eval,fewshot_pool}.jsonl"
 fi
 
 for variant in "${VARIANTS[@]}"; do

@@ -40,6 +40,18 @@ htmlcov/
 results/raw/
 results/tmp/
 # Committed: metrics.csv, results/summary.md, results/<task>.json
+# Never committed: derived Part E datasets (computed fresh from HellaSwag).
+# Committing these risks running Part E against a stale / synthetic dataset;
+# see improve/eval.sh's safety sniff.
+results/improve/hellaswag_eval.jsonl
+results/improve/hellaswag_fewshot_pool.jsonl
+results/improve/baseline.json
+results/improve/byte_norm.json
+results/improve/clean_prompt.json
+results/improve/clean_length_norm.json
+results/improve/length_norm.json
+results/improve/fewshot_random_5.json
+results/improve/fewshot_semantic_5.json
 
 # ---- Env / secrets ----
 .env
