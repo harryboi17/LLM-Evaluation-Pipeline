@@ -284,3 +284,29 @@ explains the story behind them.
 - **Significance:** not significant (95% CI includes 0)
 - **Wall time:** 0.1s
 - **Notes:** (none)
+
+## baseline — hellaswag
+- **When:** 2026-04-19T21:04+00:00
+- **Commit:** `827b481`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** n/a (baseline)
+- **95% CI (paired bootstrap, 10k):** n/a (baseline)
+- **Two-sided p-value:** n/a (baseline)
+- **Significance:** n/a (baseline)
+- **Wall time:** 0.1s
+- **Notes:** (none)
+
+## length_norm — hellaswag
+- **When:** 2026-04-19T21:04+00:00
+- **Commit:** `827b481`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** +0.0000
+- **95% CI (paired bootstrap, 10k):** [-1.0000, +1.0000]
+- **Two-sided p-value:** 1.0000
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 0.0s
+- **Notes:** length-normalised scoring

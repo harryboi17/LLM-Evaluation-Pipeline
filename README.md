@@ -33,6 +33,17 @@ The design goals are, in order:
 
 ## Quickstart
 
+**No GPU? Need real numbers for an assignment?** Open
+[`notebooks/colab_run.ipynb`](notebooks/colab_run.ipynb) in Google Colab's
+free T4 tier, set your `REPO_URL`, click *Run all*. ~45 min later the
+last cell downloads a tarball with every Part A–E artefact populated
+(result log, improvement log, report, metrics.csv, perf summary,
+determinism report). Unpack into your repo, commit, submit.
+See [`docs/cloud-setup.md`](docs/cloud-setup.md) for the full walkthrough
+plus paid alternatives (RunPod, Lambda Labs, AWS g5, Codespaces GPU).
+
+Local dev loop:
+
 ```bash
 # First-time setup (Python 3.11 + uv + optional extras)
 make bootstrap
@@ -44,7 +55,7 @@ bash scripts/smoke.sh
 # Real run on a GPU machine:
 uv sync --extra serve --extra eval --extra perf --extra improve
 make serve         # in one terminal
-make eval          # full lm-eval on MMLU-HS-CS + HellaSwag + custom
+make eval          # full lm-eval on MMLU-STEM + HellaSwag + custom
 make perf          # load-test the server
 bash improve/eval.sh  # Part E ablation ladder
 ```

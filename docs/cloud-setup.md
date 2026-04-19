@@ -9,16 +9,58 @@ This doc is the short answer to "where do I run this to get real numbers".
 
 | Provider | $/hr | GPU | Time to first `make serve` |
 |---|---|---|---|
+| **[Google Colab free](https://colab.research.google.com)** | **$0** | T4 (16 GB) | **~3 min** (browser only) |
+| **[Kaggle Notebooks free](https://kaggle.com/code)** | $0 | T4 ×2 (30 GB) | ~3 min |
 | **[RunPod](https://runpod.io)** | $0.20–0.50 | RTX 3090 / A5000 | ~5 min |
 | **[Lambda Labs](https://lambdalabs.com)** | $0.75–1.29 | A10 / A100 | ~5 min |
 | **AWS EC2 g5.xlarge** | $1.01 (spot: ~$0.40) | A10G 24 GB | ~15 min |
 | **GitHub Codespaces GPU** | $0.36 | Tesla T4 | ~3 min (1 click) |
 
-A full Part B / C / E run on Llama-3.2-1B-Instruct with N=500 fits in
-under an hour on any 24 GB card, so **$0.25–$1.50 covers the whole
-assignment end-to-end**.
+**For a one-shot submission run, use Colab free.** The project fits in a
+single notebook (`notebooks/colab_run.ipynb`), a full real run takes ~45
+minutes, and you don't need a credit card. Details in the next section.
 
-## RunPod walkthrough (fastest path)
+A full Part B / C / E run on a 1–4 B-parameter model fits in under an
+hour on any 16 GB card, so **$0.25–$1.50 covers paid options end-to-end**
+if you prefer something beefier than a T4.
+
+## Colab free (cheapest path to real numbers)
+
+The repo ships a fully-wired [`notebooks/colab_run.ipynb`](../notebooks/colab_run.ipynb)
+that handles everything: installs deps, boots vLLM, runs eval + perf +
+improve, packages results, and downloads a tarball to your laptop.
+
+**Steps:**
+
+1. Push your fork of the repo to GitHub (Colab clones via public URL).
+2. Open [Google Colab](https://colab.research.google.com) → `File` → `Upload notebook`
+   → pick `notebooks/colab_run.ipynb` from your local checkout.
+3. `Runtime` → `Change runtime type` → **T4 GPU**.
+4. Edit the config cell: set `REPO_URL` to your GitHub URL.
+   Default `MODEL` is `Qwen/Qwen2.5-1.5B-Instruct` — **not gated**, no
+   HF token needed. Alternatives in the notebook comments.
+5. `Runtime` → `Run all`. Total wall time ~45–60 min. Leave the tab
+   visible (Colab idles you out if the browser backgrounds you too long).
+6. The last cell downloads `llmeval_results.tgz`. Back on your laptop:
+
+   ```bash
+   cd path/to/LLMEvalSystem
+   tar xzf ~/Downloads/llmeval_results.tgz
+   git add results/ docs/improvement-log.md improve/report.md
+   git commit -m "chore: real numbers from Colab T4 run"
+   ```
+
+**Why Qwen2.5-1.5B instead of Llama-3.2-1B?** Both are fine choices under
+the problem statement ("any open-weight model: Llama 3 / Mistral / Phi").
+Qwen avoids the HF gated-model dance (accept license → get token → paste
+into notebook). If you already have a Llama token, flip the `MODEL`
+variable and paste `HF_TOKEN`.
+
+**Kaggle** is a drop-in alternative: same notebook works, just upload
+through the Kaggle notebooks interface and pick the T4×2 accelerator. Use
+it if Colab's free tier has been idle-killing you.
+
+## RunPod walkthrough (paid, faster GPU, persistent storage)
 
 1. Account → add $10 → Deploy Pod
 2. GPU: `RTX 3090` or `A5000`; Template: *PyTorch 2.4*; Storage 40 GB;
