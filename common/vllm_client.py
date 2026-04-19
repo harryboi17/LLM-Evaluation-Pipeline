@@ -198,6 +198,8 @@ class VLLMClient:
         stop: list[str] | None = None,
         seed: int | None = None,
         n: int = 1,
+        logprobs: int | None = None,
+        echo: bool = False,
     ) -> GenerationResult:
         """Run a single non-streaming completion.
 
@@ -209,16 +211,24 @@ class VLLMClient:
             stop: Optional stop sequences.
             seed: Optional RNG seed passed to the backend.
             n: Number of completions to request (only the first is returned).
+            logprobs: If set, request top-``logprobs`` token log-probabilities per
+                emitted token. Used by the evaluation layer for scoring.
+            echo: If ``True``, return the prompt tokens (and their logprobs, if
+                ``logprobs`` is also set) alongside the completion. Used to
+                compute loglikelihood of a continuation given a context by
+                sending ``prompt = context + continuation`` with ``max_tokens=0``.
 
         Returns:
             A :class:`GenerationResult` with the completion text and usage info.
+            When ``logprobs`` / ``echo`` are set, the raw OpenAI response (with
+            token-level log probabilities) is available on ``.raw``.
 
         Raises:
             VLLMClientError: On 4xx / 5xx / transport errors after retries.
             VLLMTimeoutError: On timeout after retries.
         """
         if self._mock:
-            return _mock_generation(prompt, max_tokens)
+            return _mock_generation(prompt, max_tokens, echo=echo, logprobs=logprobs)
 
         body: dict[str, Any] = {
             "model": self._model,
@@ -233,6 +243,10 @@ class VLLMClient:
             body["stop"] = stop
         if seed is not None:
             body["seed"] = seed
+        if logprobs is not None:
+            body["logprobs"] = logprobs
+        if echo:
+            body["echo"] = True
 
         resp = await self._post_with_retry("/completions", body)
         data = resp.json()
@@ -306,14 +320,59 @@ class VLLMClient:
                 )
 
 
-def _mock_generation(prompt: str, max_tokens: int) -> GenerationResult:
-    """Return a deterministic canned response for offline dev."""
+def _mock_generation(
+    prompt: str,
+    max_tokens: int,
+    *,
+    echo: bool = False,
+    logprobs: int | None = None,
+) -> GenerationResult:
+    """Return a deterministic canned response for offline dev.
+
+    When ``echo`` and ``logprobs`` are set, synthesise a plausible
+    ``raw["choices"][0]["logprobs"]`` payload so eval code paths that depend
+    on token-level logprobs have something to exercise.
+    """
     text = f"[mock completion for prompt of length {len(prompt)}]"
+    raw: dict[str, Any] = {
+        "choices": [
+            {
+                "text": text,
+                "finish_reason": "stop",
+                "index": 0,
+            }
+        ],
+        "usage": {
+            "prompt_tokens": max(1, len(prompt.split())),
+            "completion_tokens": max(1, min(max_tokens, len(text.split()))),
+            "total_tokens": max(1, len(prompt.split()))
+            + max(1, min(max_tokens, len(text.split()))),
+        },
+    }
+    if logprobs is not None:
+        # Deterministic -1.0 per echoed / completed token; first echoed token
+        # has logprob=None (no prior context), matching real OpenAI behaviour.
+        echoed_tokens = prompt.split() if echo else []
+        completion_tokens = [] if max_tokens == 0 else text.split()
+        all_tokens = echoed_tokens + completion_tokens
+        token_logprobs: list[float | None] = [
+            None if (echo and i == 0) else -1.0 for i in range(len(all_tokens))
+        ]
+        raw["choices"][0]["logprobs"] = {
+            "tokens": all_tokens,
+            "token_logprobs": token_logprobs,
+            "top_logprobs": [
+                None if tl is None else {tok: tl}
+                for tok, tl in zip(all_tokens, token_logprobs, strict=True)
+            ],
+            "text_offset": [],
+        }
     return GenerationResult(
         text=text,
         prompt_tokens=max(1, len(prompt.split())),
         completion_tokens=max(1, min(max_tokens, len(text.split()))),
         finish_reason="stop",
+        raw=raw,
     )
 
 

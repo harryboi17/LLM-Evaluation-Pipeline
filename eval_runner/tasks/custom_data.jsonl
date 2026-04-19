@@ -1,0 +1,50 @@
+{"question": "What is the capital of France?", "answer": "Paris"}
+{"question": "What is the capital of Japan?", "answer": "Tokyo"}
+{"question": "What is the capital of Australia?", "answer": "Canberra"}
+{"question": "What is the capital of Brazil?", "answer": "Brasilia"}
+{"question": "What is the capital of Canada?", "answer": "Ottawa"}
+{"question": "What is 2 plus 2?", "answer": "4"}
+{"question": "What is 7 multiplied by 8?", "answer": "56"}
+{"question": "What is 15 minus 7?", "answer": "8"}
+{"question": "What is 100 divided by 4?", "answer": "25"}
+{"question": "What is the square root of 81?", "answer": "9"}
+{"question": "What is the square root of 144?", "answer": "12"}
+{"question": "What is 12 squared?", "answer": "144"}
+{"question": "What is 2 to the power of 10?", "answer": "1024"}
+{"question": "How many minutes are in one hour?", "answer": "60"}
+{"question": "How many seconds are in one minute?", "answer": "60"}
+{"question": "How many hours are in one day?", "answer": "24"}
+{"question": "How many days are in a common year?", "answer": "365"}
+{"question": "Which planet is closest to the Sun?", "answer": "Mercury"}
+{"question": "Which planet is known as the Red Planet?", "answer": "Mars"}
+{"question": "Which is the largest planet in our solar system?", "answer": "Jupiter"}
+{"question": "What is the chemical symbol for gold?", "answer": "Au"}
+{"question": "What is the chemical symbol for water?", "answer": "H2O"}
+{"question": "What is the chemical symbol for sodium?", "answer": "Na"}
+{"question": "What gas do plants absorb from the atmosphere for photosynthesis?", "answer": "CO2"}
+{"question": "What is the largest ocean on Earth?", "answer": "Pacific"}
+{"question": "What is the longest river in the world?", "answer": "Nile"}
+{"question": "What is the tallest mountain on Earth?", "answer": "Everest"}
+{"question": "Which continent is the Sahara desert located in?", "answer": "Africa"}
+{"question": "In which year did World War 2 end?", "answer": "1945"}
+{"question": "Who wrote the play 'Romeo and Juliet'?", "answer": "Shakespeare"}
+{"question": "Who painted the Mona Lisa?", "answer": "DaVinci"}
+{"question": "Which programming language uses the 'def' keyword to define a function?", "answer": "Python"}
+{"question": "Which company created the Android operating system?", "answer": "Google"}
+{"question": "What does HTTP stand for? Give the first word only.", "answer": "Hypertext"}
+{"question": "What does CPU stand for? Give the first word only.", "answer": "Central"}
+{"question": "What does RAM stand for? Give the first word only.", "answer": "Random"}
+{"question": "What does SQL stand for? Give the first word only.", "answer": "Structured"}
+{"question": "Which sorting algorithm has average-case time complexity O(n log n) and is used by Python's built-in sort?", "answer": "Timsort"}
+{"question": "What data structure follows Last-In-First-Out order?", "answer": "Stack"}
+{"question": "What data structure follows First-In-First-Out order?", "answer": "Queue"}
+{"question": "Which HTTP status code means 'Not Found'?", "answer": "404"}
+{"question": "Which HTTP status code means 'OK'?", "answer": "200"}
+{"question": "What base is the binary number system?", "answer": "2"}
+{"question": "What base is the hexadecimal number system?", "answer": "16"}
+{"question": "What is the opposite of 'hot'?", "answer": "Cold"}
+{"question": "What is the opposite of 'big'?", "answer": "Small"}
+{"question": "What is the opposite of 'fast'?", "answer": "Slow"}
+{"question": "Complete the series: 2, 4, 6, 8, ?", "answer": "10"}
+{"question": "Complete the series: 1, 1, 2, 3, 5, 8, ?", "answer": "13"}
+{"question": "If all roses are flowers and all flowers need water, do roses need water? Yes or No.", "answer": "Yes"}

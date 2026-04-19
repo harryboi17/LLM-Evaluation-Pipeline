@@ -1,0 +1,33 @@
+task: custom_qa
+dataset_path: json
+dataset_kwargs:
+  data_files:
+    test: tasks/custom_data.jsonl
+training_split: null
+validation_split: null
+test_split: test
+output_type: generate_until
+doc_to_text: "Answer the question with a single short answer (one or two words).\n\nQuestion: {{question}}\nAnswer:"
+doc_to_target: "{{answer}}"
+generation_kwargs:
+  max_gen_toks: 16
+  temperature: 0.0
+  top_p: 1.0
+  do_sample: false
+  until:
+    - "\n"
+    - "."
+    - "?"
+filter_list:
+  - name: exact_match
+    filter:
+      - function: lowercase
+      - function: remove_whitespace
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: true
+    ignore_punctuation: true
+metadata:
+  version: 1.0

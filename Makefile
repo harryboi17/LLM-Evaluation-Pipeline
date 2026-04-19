@@ -17,7 +17,7 @@ MODEL := $(if $(MODEL),$(MODEL),meta-llama/Llama-3.2-1B-Instruct)
 VLLM_HOST ?= $(if $(LLMEVAL_VLLM_HOST),$(LLMEVAL_VLLM_HOST),127.0.0.1)
 VLLM_PORT ?= $(if $(LLMEVAL_VLLM_PORT),$(LLMEVAL_VLLM_PORT),8000)
 
-.PHONY: help install install-all serve client-demo eval perf perf-analyze improve \
+.PHONY: help install install-all serve client-demo eval eval-custom perf perf-analyze improve \
         lint format typecheck test test-cov smoke clean all bootstrap
 
 help: ## Show available targets
@@ -46,8 +46,11 @@ client-demo: ## Run a few sample generations against a running server
 
 # --- Evaluation (Part B) --------------------------------------------------
 
-eval: ## Run MMLU, HellaSwag, and custom benchmark
-	$(PY) -m eval_runner.run_eval --task mmlu,hellaswag,custom
+eval: ## Run MMLU-HS-CS subset, HellaSwag, and the custom task
+	$(PY) -m eval_runner.run_eval
+
+eval-custom: ## Run only the custom task
+	$(PY) -m eval_runner.run_eval --task custom_qa
 
 # --- Performance (Part C) -------------------------------------------------
 

@@ -51,6 +51,7 @@ dev = [
     "pre-commit>=3.8,<5.0",
     "detect-secrets>=1.5,<2.0",
     "types-setuptools",
+    "types-pyyaml>=6.0.12.20260408",
 ]
 
 [build-system]
@@ -96,9 +97,13 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*" = ["PLR2004", "S101", "N802"]
+"tests/**/*" = ["PLR2004", "S101", "N802", "PLC0415"]
 "scripts/**/*" = ["PLR2004"]
 "**/*.ipynb" = ["E402", "F401"]
+# eval_runner deliberately lazy-imports lm-eval / transformers / vllm_client so
+# the module stays importable without the optional `eval` extra installed.
+"eval_runner/vllm_model.py" = ["PLC0415"]
+"eval_runner/run_eval.py" = ["PLC0415"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["common", "serve", "eval_runner", "perf", "guardrails", "improve"]
