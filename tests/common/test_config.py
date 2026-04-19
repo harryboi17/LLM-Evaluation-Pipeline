@@ -10,8 +10,32 @@ from common.config import Settings, get_settings
 
 
 def test_defaults_are_sensible(isolated_env: Path) -> None:
+    """Defaults should point at a real open-weight model, not a mock/test name.
+
+    The `isolated_env` fixture strips `LLMEVAL_MODEL_NAME` from the parent
+    shell so this test sees the code-committed default, not whatever a Colab
+    / GPU-box notebook happened to export upstream.
+
+    The accepted prefix list covers the open-weight orgs we actually ship a
+    sane default for. It's intentionally broad because the problem statement
+    says "any open-weight model" and bumping the default to, say, Qwen or
+    Gemma shouldn't require a test change.
+    """
     s = Settings()
-    assert s.model_name.startswith(("meta-llama/", "mistralai/", "microsoft/"))
+    accepted_prefixes = (
+        "meta-llama/",
+        "mistralai/",
+        "microsoft/",     # Phi family
+        "Qwen/",
+        "HuggingFaceTB/", # SmolLM
+        "google/",        # Gemma
+    )
+    assert s.model_name.startswith(accepted_prefixes), (
+        f"Default model {s.model_name!r} isn't one of the known open-weight "
+        f"orgs {accepted_prefixes}. If you're intentionally pointing at a "
+        f"new provider, add its HF-hub prefix to this list."
+    )
+    assert "/" in s.model_name, "model_name must be an HF-hub-shaped id (org/name)"
     assert s.vllm_host == "127.0.0.1"
     assert s.vllm_port == 8000
     assert s.vllm_timeout_s > 0
