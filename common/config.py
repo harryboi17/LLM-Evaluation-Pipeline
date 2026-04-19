@@ -83,6 +83,16 @@ class Settings(BaseSettings):
     # --- Cache tuning ---
     cache_version: str = "v1"
 
+    # --- Generation-time overrides (used by improve.sweep) ---
+    # When set, the eval_runner vLLM wrapper replaces the task YAML's
+    # corresponding gen_kwargs for generate_until calls. Loglikelihood-only
+    # tasks ignore these (decoding params don't affect scoring). All three are
+    # None by default so task YAMLs keep driving behaviour in normal runs.
+    # Env vars: LLMEVAL_GEN_TEMPERATURE, LLMEVAL_GEN_TOP_P, LLMEVAL_GEN_TOP_K.
+    gen_temperature: float | None = None
+    gen_top_p: float | None = None
+    gen_top_k: int | None = None
+
     # --- Logging ---
     log_level: str = "INFO"
     log_format: Literal["json", "console"] = "console"

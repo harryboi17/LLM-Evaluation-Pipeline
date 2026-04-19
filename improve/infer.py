@@ -50,6 +50,7 @@ from common.result_log import ResultLogEntry, log_result
 from common.stats import paired_bootstrap
 from common.tokenization import TokenCounter
 from common.vllm_client import VLLMClient
+from guardrails.validate import load_schema, validate_output
 from improve.optimize_prompt import (
     FewshotExample,
     PromptPair,
@@ -64,6 +65,10 @@ from improve.optimize_prompt import (
 log = get_logger(__name__)
 
 _LOGPROBS_TOP_K = 5
+
+# Cached once at import; the file is ~200 bytes so the cost is trivial but
+# reloading per example adds up across thousands of predictions.
+_PREDICTION_SCHEMA = load_schema("hellaswag_option_index")
 
 
 @dataclass(frozen=True, slots=True)
@@ -250,6 +255,15 @@ async def _evaluate_example(
     )
     score_list: list[float] = list(scores)
     predicted = max(range(len(score_list)), key=lambda i: score_list[i])
+
+    # Belt-and-braces: every prediction must match the hellaswag_option_index
+    # schema (int in [0, 3]). By construction it's an argmax over 4 scores, so
+    # this should never fire — but validating here makes the schema contract a
+    # checked property rather than a comment, and surfaces any future drift
+    # (e.g. a task variant with a different arity) as a ValidationError rather
+    # than a silent downstream accuracy regression.
+    validate_output(predicted, _PREDICTION_SCHEMA)
+
     return ExampleResult(
         ind=str(row.get("ind", "")),
         label=label,

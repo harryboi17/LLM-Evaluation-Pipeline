@@ -168,6 +168,50 @@ def test_generate_until_cache_hit_skips_network(_mock_env: None) -> None:
     assert first == second
 
 
+def test_gen_overrides_from_settings_change_cache_key(
+    monkeypatch: pytest.MonkeyPatch, _mock_env: None
+) -> None:
+    """Different temperature overrides must not hit each other's cache rows.
+
+    Exercises the ``improve.sweep`` -> Settings -> vllm_model plumbing: the
+    sweep injects ``LLMEVAL_GEN_TEMPERATURE`` (and friends) as env vars per
+    subprocess; downstream, ``_one_generate`` reads them from Settings and
+    mixes them into the cache key so each sweep cell records its own row.
+    """
+    from common.config import get_settings
+    from common.vllm_client import _mock_generation
+
+    req = _FakeInstance(("Pick a number.", {"until": ["\n"], "max_gen_toks": 4}))
+    call_count = {"n": 0}
+
+    orig_mock = _mock_generation
+
+    def counting_mock(*args: object, **kwargs: object):  # type: ignore[no-untyped-def]
+        call_count["n"] += 1
+        return orig_mock(*args, **kwargs)
+
+    monkeypatch.setattr("common.vllm_client._mock_generation", counting_mock)
+
+    # Cell 1: temperature=0.0 (default).
+    model_cls = get_vllm_eval_model_class()
+    model = model_cls()
+    model.generate_until([req])
+    calls_after_first = call_count["n"]
+
+    # Cell 2: temperature=0.7 via env; different cache key so it must re-fire.
+    monkeypatch.setenv("LLMEVAL_GEN_TEMPERATURE", "0.7")
+    get_settings.cache_clear()
+    model2 = model_cls()
+    model2.generate_until([req])
+    assert call_count["n"] > calls_after_first
+
+    # Cell 3: re-enter cell 2's config; must be a cache hit (no new mock call).
+    current = call_count["n"]
+    model3 = model_cls()
+    model3.generate_until([req])
+    assert call_count["n"] == current
+
+
 def test_create_from_arg_string_parses_key_value_pairs(_mock_env: None) -> None:
     model_cls = get_vllm_eval_model_class()
     m = model_cls.create_from_arg_string("max_concurrency=4,default_max_gen_tokens=64")

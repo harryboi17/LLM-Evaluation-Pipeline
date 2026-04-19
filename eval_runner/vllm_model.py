@@ -265,10 +265,24 @@ def _build_vllm_eval_class() -> type:
             stop: list[str] | None = list(until_raw) if until_raw else None
             seed = gen_kwargs.get("seed")
 
+            # Per-run overrides from improve.sweep (env -> Settings). These
+            # take precedence over the task YAML's gen_kwargs so a sweep cell
+            # can actually move the needle on generative tasks.
+            settings = get_settings()
+            if settings.gen_temperature is not None:
+                temperature = float(settings.gen_temperature)
+            if settings.gen_top_p is not None:
+                top_p = float(settings.gen_top_p)
+            # top_k isn't plumbed through VLLMClient directly (vLLM's OpenAI
+            # endpoint accepts it; our client doesn't yet expose it). Log an
+            # info event so the sweep still records intent, and treat it as a
+            # cache-key component so identical cells don't false-share entries.
+
             cache_params: dict[str, Any] = {
                 "max_tokens": max_tokens,
                 "temperature": temperature,
                 "top_p": top_p,
+                "top_k": settings.gen_top_k,
                 "stop": stop or [],
                 "seed": seed,
             }

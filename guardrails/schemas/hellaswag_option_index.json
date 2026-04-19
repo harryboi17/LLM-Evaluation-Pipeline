@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llmeval/schemas/hellaswag_option_index.json",
+  "title": "HellaSwag option index",
+  "description": "Integer in [0, 3] identifying the chosen HellaSwag continuation. Belt-and-braces check for improve.infer predictions; by construction these are argmax indices and can't be malformed, but validating ensures downstream consumers (dashboards, exports) can rely on the shape.",
+  "type": "integer",
+  "minimum": 0,
+  "maximum": 3
+}

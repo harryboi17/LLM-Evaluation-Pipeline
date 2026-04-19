@@ -1,0 +1,53 @@
+# Dockerfile.serve -- minimal image wrapping `make serve`.
+#
+# Base image is the official vLLM CUDA runtime, which already has torch,
+# CUDA libs, and the vllm binary. We layer our project on top so
+# `python -m serve.serve` works with all the tunables from common.config.
+#
+# Build:
+#   docker build -f Dockerfile.serve -t llmeval-serve:local .
+#
+# Run (GPU required; rootless podman also works with --device=nvidia.com/gpu=all):
+#   docker run --rm --gpus all -p 8000:8000 \
+#       -e HF_TOKEN=$HF_TOKEN \
+#       -e LLMEVAL_MODEL_NAME=meta-llama/Llama-3.2-1B-Instruct \
+#       llmeval-serve:local
+#
+# Or offline for CI / smoke:
+#   docker run --rm -e LLMEVAL_MOCK_BACKEND=true llmeval-serve:local
+FROM vllm/vllm-openai:latest AS base
+
+# Silence pip / python buffering noise in container logs.
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    # vLLM honours these; surfacing them here makes overrides obvious.
+    HF_HOME=/root/.cache/huggingface \
+    LLMEVAL_LOG_FORMAT=json
+
+# Install uv (fast, deterministic dep resolution, matches local dev).
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+# Dependency layer: copy only the lock + manifest first so source changes
+# don't invalidate the (slow) uv sync cache.
+COPY pyproject.toml uv.lock ./
+# The serve extra already pulls in vllm, which is redundant with the base
+# image; `--no-install-project` plus `--no-default-groups` keeps the image
+# small. We install eval + improve so the container can also be re-used as
+# an eval runner against a remote vLLM endpoint (reusing the same image).
+RUN uv sync --frozen --extra eval --extra improve --no-install-project --no-default-groups
+
+# Source layer: the rest of the project.
+COPY . .
+
+# Install the project itself so `python -m serve.serve` resolves.
+RUN uv sync --frozen --extra eval --extra improve --no-default-groups
+
+EXPOSE 8000
+
+# `python -m` keeps our Settings / structlog configuration in the loop instead
+# of calling `vllm serve` directly. The env-var defaults are picked up from
+# the container runtime; override with `-e LLMEVAL_*` at `docker run`.
+ENTRYPOINT ["uv", "run", "python", "-m", "serve.serve"]

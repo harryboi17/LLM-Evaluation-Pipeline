@@ -107,8 +107,14 @@ def load_schema(name: str) -> dict[str, Any]:
     return schema
 
 
-def validate_output(output: str, schema: dict[str, Any]) -> None:
+def validate_output(output: object, schema: dict[str, Any]) -> None:
     """Validate ``output`` against ``schema``.
+
+    Args:
+        output: The value to validate. Any JSON-compatible Python value is
+            accepted — strings for ``short_answer`` / ``mcq_letter``, integers
+            for ``hellaswag_option_index``, etc.
+        schema: A parsed JSON Schema dict (draft 2020-12).
 
     Raises:
         ValidationError: If the output fails the schema.

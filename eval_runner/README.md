@@ -17,16 +17,24 @@ Custom lm-evaluation-harness model wrapper that routes all calls through our vLL
 # Offline (mock backend, no GPU):
 LLMEVAL_MOCK_BACKEND=true make eval
 
-# Run all three tasks (MMLU-HS-CS subset + HellaSwag + custom):
+# Run the default task list: mmlu_stem (the subject-group aggregate covering
+# physics / CS / math -- ~3.4k examples -- matching Part E's "MMLU (subject
+# group) +2.0" target), hellaswag, and our custom_qa task:
 make eval
 
 # One task with a small cap:
 uv run python -m eval_runner.run_eval --task custom_qa --limit 10
 
+# Full 57-subject MMLU aggregate, slow but defensible:
+uv run python -m eval_runner.run_eval --task mmlu --limit 200
+
+# Fast single-subject probe (useful for iterating on prompts):
+uv run python -m eval_runner.run_eval --task mmlu_high_school_computer_science --limit 50
+
 # Custom limits, few-shot, concurrency:
 uv run python -m eval_runner.run_eval \
-    --task mmlu_high_school_computer_science,hellaswag \
-    --limit 100 \
+    --task mmlu_stem,hellaswag \
+    --limit 200 \
     --num-fewshot 5 \
     --max-concurrency 16
 ```

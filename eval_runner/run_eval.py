@@ -44,12 +44,16 @@ from common.result_log import ResultLogEntry, log_result
 
 log = get_logger(__name__)
 
-# Default task list mirrors PLAN.md. MMLU's full suite is ~15k examples across
-# 57 subjects; the harness also exposes per-subject slugs which are much cheaper
-# to run. We default to one representative subject; override with --task to run
-# the whole MMLU aggregate.
+# Default task list mirrors PLAN.md. MMLU's full 57-subject suite is ~15k
+# examples; the harness exposes subject-group aggregates (``mmlu_stem``,
+# ``mmlu_humanities``, …) that cover ~3-4k examples each and are what
+# Part E's target lift of "MMLU (subject group) +2.0" refers to. We default
+# to ``mmlu_stem`` because it's the subject group most sensitive to small
+# models' reasoning quality (physics, CS, math) and the one most papers
+# report. Override with ``--task mmlu`` for the full aggregate or
+# ``--task mmlu_high_school_computer_science`` for a fast single subject.
 _DEFAULT_TASKS: tuple[str, ...] = (
-    "mmlu_high_school_computer_science",
+    "mmlu_stem",
     "hellaswag",
     "custom_qa",
 )

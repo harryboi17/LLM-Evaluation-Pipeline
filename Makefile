@@ -46,7 +46,7 @@ client-demo: ## Run a few sample generations against a running server
 
 # --- Evaluation (Part B) --------------------------------------------------
 
-eval: ## Run MMLU-HS-CS subset, HellaSwag, and the custom task
+eval: ## Run MMLU-STEM subject group, HellaSwag, and the custom task
 	$(PY) -m eval_runner.run_eval
 
 eval-custom: ## Run only the custom task

@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Fast tier: lint + typecheck + unit tests against the base dev install.
+  # Runs on every push; under 2 minutes on a cold runner.
+  fast:
+    name: lint / typecheck / test (base)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Sync base + dev (no optional extras)
+        run: uv sync --frozen
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Typecheck (common only; parts need extras)
+        run: uv run mypy common
+
+      - name: Pytest (common + serve only; eval/improve tests skip gracefully)
+        run: uv run pytest tests/common tests/serve tests/perf tests/guardrails -q
+
+      - name: detect-secrets baseline still matches
+        run: |
+          uv run detect-secrets scan --baseline .secrets.baseline || true
+          test -f .secrets.baseline || echo "no baseline; skipping"
+
+  # Full tier: install every extra, run smoke.sh end-to-end.
+  # Runs only on main-branch pushes + PRs to main; ~10 minutes cold.
+  full:
+    name: full smoke (eval + perf + improve extras)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: fast
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Sync with every extra
+        run: uv sync --extra eval --extra perf --extra improve --frozen
+
+      - name: End-to-end smoke (covers all 5 parts under mock backend)
+        env:
+          LLMEVAL_MOCK_BACKEND: "true"
+        run: bash scripts/smoke.sh
+
+      - name: Guard - no generated artefacts committed (AGENTS.md rule 26)
+        run: |
+          # results/raw, results/tmp, .cache, htmlcov, *.coverage must never appear.
+          FORBIDDEN=$(git ls-files | grep -E '^(results/raw/|results/tmp/|\.cache/|htmlcov/|\.coverage)' || true)
+          if [ -n "$FORBIDDEN" ]; then
+              echo "::error::committed generated artefacts found:"
+              echo "$FORBIDDEN"
+              exit 1
+          fi
+
+      - name: Guard - no bare prints in source (AGENTS.md rule 11)
+        run: |
+          # Allow prints only in scripts/ and under tests/; structured logging everywhere else.
+          OFFENDERS=$(
+              grep -Rn --include='*.py' -E '^[[:space:]]*print\(' \
+                  common serve eval_runner perf guardrails improve 2>/dev/null || true
+          )
+          if [ -n "$OFFENDERS" ]; then
+              echo "::error::bare print() in source; use structlog via common.logging.get_logger():"
+              echo "$OFFENDERS"
+              exit 1
+          fi

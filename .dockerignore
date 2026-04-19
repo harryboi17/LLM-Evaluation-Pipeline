@@ -1,0 +1,40 @@
+# Keep the Docker build context small. Docker copies . into the image; without
+# this, the venv, caches, and results blow up the image and invalidate the
+# layer cache on every non-source edit.
+
+# Python / build artefacts
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Runtime state
+.cache/
+results/raw/
+results/tmp/
+
+# Git metadata (use --label to pin a commit SHA if needed)
+.git/
+.gitignore
+
+# CI / local dev artefacts
+.github/
+.pre-commit-config.yaml
+.env
+.env.*
+!.env.example
+
+# Notebooks (rendered during perf-analyze; no need in a serving image)
+**/*.ipynb_checkpoints/
