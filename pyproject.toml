@@ -138,12 +138,13 @@ module = [
     "eval_runner.*",
     "guardrails.*",
     "improve.*",
+    "perf.*",
 ]
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
 [[tool.mypy.overrides]]
-module = ["tests.*", "perf.*", "scripts.*"]
+module = ["tests.*", "scripts.*"]
 # Scripts and tests get a pass on strict type checking.
 disallow_untyped_defs = false
 

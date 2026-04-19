@@ -75,7 +75,7 @@ format: ## Ruff format (+ auto-fix lint)
 	$(UV) run ruff check . --fix
 
 typecheck: ## Mypy
-	$(UV) run mypy common serve eval_runner guardrails improve
+	$(UV) run mypy common serve eval_runner perf guardrails improve
 
 test: ## Pytest (no coverage gate)
 	$(UV) run pytest
