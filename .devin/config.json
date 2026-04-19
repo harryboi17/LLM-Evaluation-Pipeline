@@ -1,0 +1,6 @@
+{
+  "read_config_from": {
+    "cursor": true,
+    "claude": true
+  }
+}
