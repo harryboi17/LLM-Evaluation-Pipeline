@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llmeval/schemas/mcq_letter.json",
+  "title": "Multiple-choice letter",
+  "description": "Validator for multiple-choice answers - a single uppercase letter A-E optionally followed by a trailing period.",
+  "type": "string",
+  "pattern": "^[A-E]\\.?$"
+}
