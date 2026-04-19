@@ -62,8 +62,8 @@ if [ ! -f pyproject.toml ]; then
         die "not in a project checkout and REPO_URL isn't set; either cd into the repo first or export REPO_URL=<git url>"
     fi
     log "cloning ${REPO_URL}"
-    git clone "${REPO_URL}" LLMEvalSystem
-    cd LLMEvalSystem
+    git clone "${REPO_URL}" LLM-Evaluation-Pipeline
+    cd LLM-Evaluation-Pipeline
     if [ -n "${LLMEVAL_BRANCH:-}" ]; then
         git checkout "${LLMEVAL_BRANCH}"
     fi

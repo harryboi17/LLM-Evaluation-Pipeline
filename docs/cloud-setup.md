@@ -44,7 +44,7 @@ improve, packages results, and downloads a tarball to your laptop.
 6. The last cell downloads `llmeval_results.tgz`. Back on your laptop:
 
    ```bash
-   cd path/to/LLMEvalSystem
+   cd path/to/LLM-Evaluation-Pipeline
    tar xzf ~/Downloads/llmeval_results.tgz
    git add results/ docs/improvement-log.md improve/report.md
    git commit -m "chore: real numbers from Colab T4 run"
@@ -69,9 +69,9 @@ it if Colab's free tier has been idle-killing you.
 4. One-shot bootstrap:
 
    ```bash
-   export REPO_URL=https://github.com/<you>/LLMEvalSystem.git
+   export REPO_URL=https://github.com/harryboi17/LLM-Evaluation-Pipeline.git
    export HF_TOKEN=hf_xxxxxxxxxxxxx   # Llama is gated; get a token on huggingface.co
-   curl -fsSL https://raw.githubusercontent.com/<you>/LLMEvalSystem/main/scripts/cloud_bootstrap.sh | bash
+   curl -fsSL https://raw.githubusercontent.com/harryboi17/LLM-Evaluation-Pipeline/main/scripts/cloud_bootstrap.sh | bash
    ```
 
    (Or: clone the repo first and run `bash scripts/cloud_bootstrap.sh` in the
@@ -80,7 +80,7 @@ it if Colab's free tier has been idle-killing you.
 5. Real run:
 
    ```bash
-   cd LLMEvalSystem
+   cd LLM-Evaluation-Pipeline
 
    # Boot vLLM (first time downloads ~2 GB of weights)
    make serve &
@@ -96,8 +96,8 @@ it if Colab's free tier has been idle-killing you.
 
    ```bash
    # On your Mac / laptop:
-   scp -P <port> -r root@<pod-ip>:/workspace/LLMEvalSystem/results ./results
-   scp -P <port> -r root@<pod-ip>:/workspace/LLMEvalSystem/docs/improvement-log.md ./docs/
+   scp -P <port> -r root@<pod-ip>:/workspace/LLM-Evaluation-Pipeline/results ./results
+   scp -P <port> -r root@<pod-ip>:/workspace/LLM-Evaluation-Pipeline/docs/improvement-log.md ./docs/
    ```
 
 7. **Stop the pod when done** (RunPod doesn't auto-stop; you'll pay for

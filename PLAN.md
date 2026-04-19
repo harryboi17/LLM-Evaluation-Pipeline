@@ -24,7 +24,7 @@ this project. Everything in Phase 0 is done **before** Part A.
 ### 0.1 Repository layout
 
 ```
-LLMEvalSystem/
+LLM-Evaluation-Pipeline/
 ├── PLAN.md                          # this file
 ├── README.md                        # human quickstart
 ├── AGENTS.md                        # canonical ruleset (AI + human)

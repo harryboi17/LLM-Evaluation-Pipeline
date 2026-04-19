@@ -1,5 +1,5 @@
 [project]
-name = "llm-eval-system"
+name = "llm-evaluation-pipeline"
 version = "0.1.0"
 description = "Scaled-down LLM evaluation pipeline built on vLLM + lm-evaluation-harness."
 readme = "README.md"
