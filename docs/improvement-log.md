@@ -336,3 +336,81 @@ explains the story behind them.
 - **Significance:** not significant (95% CI includes 0)
 - **Wall time:** 0.0s
 - **Notes:** length-normalised scoring
+
+## baseline — hellaswag
+- **When:** 2026-04-19T23:45+00:00
+- **Commit:** `cd17c83`
+- **Task / limit / seed:** hellaswag / 200 / 42
+- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
+- **Accuracy:** 0.5250
+- **Delta vs baseline:** n/a (baseline)
+- **95% CI (paired bootstrap, 10k):** n/a (baseline)
+- **Two-sided p-value:** n/a (baseline)
+- **Significance:** n/a (baseline)
+- **Wall time:** 39.0s
+- **Notes:** ablation run via improve/eval.sh
+
+## length_norm — hellaswag
+- **When:** 2026-04-19T23:45+00:00
+- **Commit:** `cd17c83`
+- **Task / limit / seed:** hellaswag / 200 / 42
+- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
+- **Accuracy:** 0.6250
+- **Delta vs baseline:** +0.1000
+- **95% CI (paired bootstrap, 10k):** [+0.0250, +0.1750]
+- **Two-sided p-value:** 0.0088
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 7.6s
+- **Notes:** ablation run via improve/eval.sh
+
+## byte_norm — hellaswag
+- **When:** 2026-04-19T23:45+00:00
+- **Commit:** `cd17c83`
+- **Task / limit / seed:** hellaswag / 200 / 42
+- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
+- **Accuracy:** 0.6450
+- **Delta vs baseline:** +0.1200
+- **95% CI (paired bootstrap, 10k):** [+0.0400, +0.2000]
+- **Two-sided p-value:** 0.0062
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 7.4s
+- **Notes:** ablation run via improve/eval.sh
+
+## clean_prompt — hellaswag
+- **When:** 2026-04-19T23:46+00:00
+- **Commit:** `cd17c83`
+- **Task / limit / seed:** hellaswag / 200 / 42
+- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
+- **Accuracy:** 0.5100
+- **Delta vs baseline:** -0.0150
+- **95% CI (paired bootstrap, 10k):** [-0.0550, +0.0250]
+- **Two-sided p-value:** 0.5294
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 31.5s
+- **Notes:** ablation run via improve/eval.sh
+
+## clean_length_norm — hellaswag
+- **When:** 2026-04-19T23:46+00:00
+- **Commit:** `cd17c83`
+- **Task / limit / seed:** hellaswag / 200 / 42
+- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
+- **Accuracy:** 0.6100
+- **Delta vs baseline:** +0.0850
+- **95% CI (paired bootstrap, 10k):** [+0.0000, +0.1700]
+- **Two-sided p-value:** 0.0506
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 8.5s
+- **Notes:** ablation run via improve/eval.sh
+
+## fewshot_random_5 — hellaswag
+- **When:** 2026-04-19T23:48+00:00
+- **Commit:** `cd17c83`
+- **Task / limit / seed:** hellaswag / 200 / 42
+- **Model:** `Qwen/Qwen2.5-1.5B-Instruct` (mock_backend=False)
+- **Accuracy:** 0.6350
+- **Delta vs baseline:** +0.1100
+- **95% CI (paired bootstrap, 10k):** [+0.0350, +0.1900]
+- **Two-sided p-value:** 0.0070
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 101.4s
+- **Notes:** ablation run via improve/eval.sh

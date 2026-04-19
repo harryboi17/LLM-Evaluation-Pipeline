@@ -1,5 +1,5 @@
 {
-  "duration_s": 645.4439298540001,
+  "duration_s": 575.6406620530006,
   "limit": 200,
   "max_concurrency": 16,
   "method": "real_gpu_Qwen/Qwen2.5-1.5B-Instruct",
