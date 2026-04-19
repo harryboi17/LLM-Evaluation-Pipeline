@@ -169,6 +169,12 @@ class SemanticRetriever:
 
     Lazily imports ``sentence_transformers`` so this module is still importable
     without the ``improve`` extra installed.
+
+    **Fallback**: when the sentence-transformer model can't load (most commonly
+    because HuggingFace Hub is unreachable — air-gapped deploys or a proxy
+    that blocks SSL), we fall back to a scikit-learn ``TfidfVectorizer``
+    instead. Quality drops noticeably but the code path still works and the
+    retriever is deterministic. Callers can distinguish via :attr:`backend`.
     """
 
     def __init__(self, pool: Sequence[FewshotExample], model: str | None = None) -> None:
@@ -176,23 +182,70 @@ class SemanticRetriever:
         self._embedder: Any | None = None
         self._pool_emb: Any | None = None
         self._model_name: str = model or "sentence-transformers/all-MiniLM-L6-v2"
+        self._backend: str = "uninitialised"
+
+    @property
+    def backend(self) -> str:
+        """Return ``"sentence-transformers"``, ``"tfidf"``, or ``"uninitialised"``."""
+        return self._backend
 
     def _ensure_embedder(self) -> None:
         if self._embedder is not None:
             return
+
+        # Under the mock backend the whole point is to run offline; skip the
+        # HF attempt entirely and go straight to TF-IDF so we don't burn 30s
+        # on retry backoff every run.
+        from common.config import get_settings
+
+        if not get_settings().mock_backend:
+            # Try the preferred sentence-transformer backend.
+            try:
+                from sentence_transformers import SentenceTransformer
+            except ImportError as exc:
+                raise ImportError(
+                    "sentence-transformers not installed; run `uv sync --extra improve`."
+                ) from exc
+
+            try:
+                log.info("semantic_retriever_load", model=self._model_name)
+                self._embedder = SentenceTransformer(self._model_name)
+                self._pool_emb = self._embedder.encode(
+                    [ex.ctx for ex in self._pool],
+                    normalize_embeddings=True,
+                    show_progress_bar=False,
+                )
+                self._backend = "sentence-transformers"
+                return
+            except Exception as exc:
+                # Hub unreachable, model not cached, SSL pinning failure, etc.
+                # HF can raise many error types (SSLError, HTTPError, OSError,
+                # RuntimeError, ...) so we catch Exception here on purpose and
+                # always fall through to TF-IDF rather than propagate.
+                log.warning(
+                    "semantic_retriever_fallback_to_tfidf",
+                    model=self._model_name,
+                    reason=type(exc).__name__,
+                    message=str(exc)[:200],
+                )
+
+        # TF-IDF fallback: stdlib + sklearn (already a dep of the improve extra).
         try:
-            from sentence_transformers import SentenceTransformer
+            from sklearn.feature_extraction.text import TfidfVectorizer
         except ImportError as exc:
             raise ImportError(
-                "sentence-transformers not installed; run `uv sync --extra improve`."
+                "scikit-learn not installed; needed for TF-IDF fallback. "
+                "Run `uv sync --extra improve`."
             ) from exc
-        log.info("semantic_retriever_load", model=self._model_name)
-        self._embedder = SentenceTransformer(self._model_name)
-        self._pool_emb = self._embedder.encode(
-            [ex.ctx for ex in self._pool],
-            normalize_embeddings=True,
-            show_progress_bar=False,
-        )
+        vec = TfidfVectorizer(max_features=8192, ngram_range=(1, 2))
+        mat = vec.fit_transform([ex.ctx for ex in self._pool])
+        # Normalise rows so cosine similarity is a dot product.
+        import numpy as np
+        from sklearn.preprocessing import normalize
+
+        self._embedder = _TfidfEmbedderAdapter(vec, normalize)
+        self._pool_emb = np.asarray(normalize(mat, norm="l2", axis=1).todense())
+        self._backend = "tfidf"
 
     def topk(self, query: str, k: int) -> list[FewshotExample]:
         """Return the top-``k`` pool examples most similar to ``query``."""
@@ -209,6 +262,34 @@ class SemanticRetriever:
         sims = np.asarray(self._pool_emb) @ np.asarray(q_emb)
         order = np.argsort(-sims)[:k]
         return [self._pool[int(i)] for i in order]
+
+
+class _TfidfEmbedderAdapter:
+    """Adapter giving a :class:`TfidfVectorizer` a sentence-transformers-ish API.
+
+    Only :meth:`encode` is used by :class:`SemanticRetriever`; we match the
+    signature (``normalize_embeddings``, ``show_progress_bar``) so the rest of
+    the code stays backend-agnostic.
+    """
+
+    def __init__(self, vec: Any, normalize_fn: Any) -> None:
+        self._vec = vec
+        self._normalize = normalize_fn
+
+    def encode(
+        self,
+        texts: Sequence[str],
+        *,
+        normalize_embeddings: bool = True,
+        show_progress_bar: bool = False,
+    ) -> Any:
+        import numpy as np
+
+        _ = show_progress_bar  # unused; kept for API parity
+        mat = self._vec.transform(list(texts))
+        if normalize_embeddings:
+            mat = self._normalize(mat, norm="l2", axis=1)
+        return np.asarray(mat.todense())
 
 
 __all__ = [

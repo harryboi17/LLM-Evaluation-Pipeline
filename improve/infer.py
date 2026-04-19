@@ -48,6 +48,7 @@ from common.errors import EvalError
 from common.logging import get_logger
 from common.result_log import ResultLogEntry, log_result
 from common.stats import paired_bootstrap
+from common.tokenization import TokenCounter
 from common.vllm_client import VLLMClient
 from improve.optimize_prompt import (
     FewshotExample,
@@ -167,6 +168,7 @@ async def _score_pair(
     model: str,
     pair: PromptPair,
     scoring: ScoringMode,
+    token_counter: TokenCounter,
 ) -> float:
     """Score a single ``PromptPair`` — cached, async, returns a scalar score.
 
@@ -174,6 +176,11 @@ async def _score_pair(
     echo, logprobs, max_tokens, temperature. Changing the scoring mode alone
     does not require re-hitting the model — we cache the raw token logprobs and
     derive scores locally.
+
+    Continuation token count is computed via the shared ``TokenCounter`` (HF
+    BPE against a real model, whitespace fallback under the mock backend), so
+    ``n_cont`` matches what vLLM tokenises server-side token-for-token on real
+    hardware — not an approximation based on whitespace splits.
     """
     full_prompt = pair.prompt + pair.continuation
     cache_params: dict[str, Any] = {
@@ -199,14 +206,12 @@ async def _score_pair(
     tokens: list[str] = logprobs_block.get("tokens", [])
     token_logprobs: list[float | None] = logprobs_block.get("token_logprobs", [])
 
-    # Figure out how many tokens the continuation contributed. We look at the
-    # number of tokens whose text-offset (or token index) corresponds to the
-    # continuation. vLLM / OpenAI doesn't always provide text_offset, so we
-    # fall back to "anything beyond the prompt's whitespace-token count":
-    prompt_toks = max(0, len(pair.prompt.split()))
-    # Mock backend emits N whitespace tokens for the full prompt; real vLLM
-    # emits BPE tokens. Both converge on "continuation is the tail of tokens".
-    n_cont = max(1, len(tokens) - prompt_toks)
+    # n_cont from the tokeniser: count(full) - count(prompt). Clamped to
+    # [1, len(tokens)] so we always score at least one token and never run off
+    # the end of the echoed logprobs slice.
+    n_prompt = token_counter.count(pair.prompt)
+    n_full = token_counter.count(full_prompt)
+    n_cont = max(1, min(len(tokens) if tokens else n_full - n_prompt, n_full - n_prompt))
     cont_logprobs = token_logprobs[-n_cont:] if token_logprobs else []
     cont_logprobs_clean: list[float] = [lp for lp in cont_logprobs if lp is not None]
     return score_logprob(
@@ -226,6 +231,7 @@ async def _evaluate_example(
     pool: list[FewshotExample],
     retriever: SemanticRetriever | None,
     rng: random.Random,
+    token_counter: TokenCounter,
 ) -> ExampleResult:
     """Score all endings for one example and return the per-example outcome."""
     ctx = str(row.get("ctx", ""))
@@ -237,7 +243,10 @@ async def _evaluate_example(
     pairs = _build_pairs(variant, ctx, endings, activity, fewshot)
 
     scores = await asyncio.gather(
-        *(_score_pair(client, sem, cache, model, p, variant.scoring) for p in pairs)
+        *(
+            _score_pair(client, sem, cache, model, p, variant.scoring, token_counter)
+            for p in pairs
+        )
     )
     score_list: list[float] = list(scores)
     predicted = max(range(len(score_list)), key=lambda i: score_list[i])
@@ -271,6 +280,7 @@ async def evaluate(
     cache = PromptCache()
     rng = random.Random(seed)
     sem = asyncio.Semaphore(max_concurrency)
+    token_counter = TokenCounter.from_settings(model)
     async with VLLMClient() as client:
         return list(
             await asyncio.gather(
@@ -285,6 +295,7 @@ async def evaluate(
                         pool,
                         retriever,
                         rng,
+                        token_counter,
                     )
                     for row in eval_rows
                 )

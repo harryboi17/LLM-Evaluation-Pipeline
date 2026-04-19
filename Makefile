@@ -18,7 +18,7 @@ VLLM_HOST ?= $(if $(LLMEVAL_VLLM_HOST),$(LLMEVAL_VLLM_HOST),127.0.0.1)
 VLLM_PORT ?= $(if $(LLMEVAL_VLLM_PORT),$(LLMEVAL_VLLM_PORT),8000)
 
 .PHONY: help install install-all serve client-demo eval eval-custom perf perf-analyze improve \
-        lint format typecheck test test-cov smoke clean all bootstrap
+        lint format typecheck test test-cov smoke clean cache-clear all bootstrap
 
 help: ## Show available targets
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -93,3 +93,13 @@ clean: ## Remove caches and temporary artifacts
 	rm -rf .cache results/tmp results/raw
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name .ipynb_checkpoints -exec rm -rf {} + 2>/dev/null || true
+
+cache-clear: ## Wipe the prompt cache (keep results/). Use after changing model/dtype/vLLM version.
+	@CACHE_DIR="$${LLMEVAL_CACHE_DIR:-.cache}"; \
+	if [ -d "$$CACHE_DIR" ]; then \
+	    echo "removing $$CACHE_DIR/prompt_cache.sqlite"; \
+	    rm -f "$$CACHE_DIR/prompt_cache.sqlite"; \
+	else \
+	    echo "no cache at $$CACHE_DIR — nothing to clear"; \
+	fi
+	@echo "alternatively: bump LLMEVAL_CACHE_VERSION (e.g. v2) to invalidate without deleting."

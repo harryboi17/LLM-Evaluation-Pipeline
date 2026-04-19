@@ -117,6 +117,32 @@ def test_loglikelihood_rolling_against_mock_backend(_mock_env: None) -> None:
         assert lp < 0.0
 
 
+def test_loglikelihood_rolling_math_matches_mock_emission(_mock_env: None) -> None:
+    """Verify the rolling sum equals what the mock generator actually emits.
+
+    The mock generator in ``common.vllm_client._mock_generation`` assigns
+    ``logprob=None`` to the first echoed token and ``-1.0`` to every
+    subsequent token. So for a text with N whitespace tokens, the rolling
+    log-likelihood should be exactly ``-(N - 1)``. This catches regressions
+    in the slice math or ``None`` filtering that purely "is it negative?"
+    assertions would miss.
+    """
+    model_cls = get_vllm_eval_model_class()
+    model = model_cls()
+    inputs = [
+        ("one two three four five", -4.0),  # 5 tokens -> -(5-1) = -4
+        ("alpha beta", -1.0),  # 2 tokens -> -1
+        ("solo", 0.0),  # 1 token -> first is None -> sum = 0
+    ]
+    requests = [_FakeInstance((text,)) for text, _ in inputs]
+    results = model.loglikelihood_rolling(requests)
+    assert len(results) == len(inputs)
+    for (_, expected), actual in zip(inputs, results, strict=True):
+        assert actual == pytest.approx(expected), (
+            f"rolling sum drift: expected {expected}, got {actual}"
+        )
+
+
 def test_generate_until_against_mock_backend(_mock_env: None) -> None:
     model_cls = get_vllm_eval_model_class()
     model = model_cls()

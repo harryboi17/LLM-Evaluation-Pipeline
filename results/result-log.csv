@@ -1,7 +1,8 @@
 run_id,timestamp,commit,model,task,method,limit,num_fewshot,seed,metric,value,stderr,delta,ci95_low,ci95_high,wall_s,mock_backend,notes
-1,2026-04-19T17:26:14+00:00,035bba6,mock/test-1b,hellaswag,baseline,30,,42,acc,0.000000,,,,,0.340585,true,baseline; default prompt + raw sum logprob
-2,2026-04-19T17:26:28+00:00,035bba6,mock/test-1b,hellaswag,length_norm,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,0.040841,true,length_norm ablation
-3,2026-04-19T17:26:28+00:00,035bba6,mock/test-1b,hellaswag,byte_norm,30,,42,acc,0.000000,,0.000000,0.000000,0.000000,0.042954,true,byte_norm ablation
-4,2026-04-19T17:26:29+00:00,035bba6,mock/test-1b,hellaswag,clean_prompt,30,,42,acc,0.000000,,0.000000,0.000000,0.000000,0.374279,true,clean_prompt ablation
-5,2026-04-19T17:26:29+00:00,035bba6,mock/test-1b,hellaswag,clean_length_norm,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,0.081852,true,clean_length_norm ablation
-6,2026-04-19T17:26:30+00:00,035bba6,mock/test-1b,hellaswag,fewshot_random_5,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,0.707039,true,fewshot_random_5 ablation
+1,2026-04-19T20:19:43+00:00,c1f8fa0,mock/test-1b,hellaswag,baseline,30,,42,acc,0.000000,,,,,0.313143,true,baseline ablation
+2,2026-04-19T20:19:43+00:00,c1f8fa0,mock/test-1b,hellaswag,length_norm,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,0.045765,true,length_norm ablation
+3,2026-04-19T20:19:43+00:00,c1f8fa0,mock/test-1b,hellaswag,byte_norm,30,,42,acc,0.000000,,0.000000,0.000000,0.000000,0.048196,true,byte_norm ablation
+4,2026-04-19T20:19:44+00:00,c1f8fa0,mock/test-1b,hellaswag,clean_prompt,30,,42,acc,0.000000,,0.000000,0.000000,0.000000,0.413848,true,clean_prompt ablation
+5,2026-04-19T20:19:44+00:00,c1f8fa0,mock/test-1b,hellaswag,clean_length_norm,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,0.052092,true,clean_length_norm ablation
+6,2026-04-19T20:19:46+00:00,c1f8fa0,mock/test-1b,hellaswag,fewshot_random_5,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,0.792413,true,fewshot_random_5 ablation
+7,2026-04-19T20:19:47+00:00,c1f8fa0,mock/test-1b,hellaswag,fewshot_semantic_5,30,,42,acc,0.200000,,0.200000,0.066667,0.366667,1.459442,true,fewshot_semantic_5 ablation

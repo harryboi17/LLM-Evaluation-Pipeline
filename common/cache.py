@@ -42,7 +42,13 @@ CREATE INDEX IF NOT EXISTS idx_cache_model ON prompt_cache (model);
 
 
 def _compute_key(model: str, prompt: str, params: dict[str, Any]) -> str:
-    """Return a stable hex digest for ``(model, prompt, params)``.
+    """Return a stable hex digest for ``(cache_version, model, prompt, params)``.
+
+    The active :attr:`common.config.Settings.cache_version` is mixed into the
+    key so bumping ``LLMEVAL_CACHE_VERSION`` invalidates every stored entry
+    without needing to delete the SQLite file. This is the escape hatch when
+    the serving config (dtype, max_model_len, vLLM release) changes in a way
+    the ``model`` field alone doesn't capture.
 
     Args:
         model: Model identifier (e.g., ``meta-llama/Llama-3.2-1B-Instruct``).
@@ -53,7 +59,12 @@ def _compute_key(model: str, prompt: str, params: dict[str, Any]) -> str:
         A hex-encoded SHA-256 digest.
     """
     payload = json.dumps(
-        {"model": model, "prompt": prompt, "params": params},
+        {
+            "cache_version": get_settings().cache_version,
+            "model": model,
+            "prompt": prompt,
+            "params": params,
+        },
         sort_keys=True,
         separators=(",", ":"),
     )

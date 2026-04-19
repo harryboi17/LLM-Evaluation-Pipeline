@@ -72,7 +72,15 @@ documented in `guardrails/README.md`.
 | `clean_prompt` | 0.0000 | +0.0000 | [0.000, 0.000] | 1.000 | not significant |
 | `clean_length_norm` | 0.2000 | **+0.2000** | [+0.067, +0.367] | 0.001 | significantly better |
 | `fewshot_random_5` | 0.2000 | **+0.2000** | [+0.067, +0.367] | 0.001 | significantly better |
-| `fewshot_semantic_5` | (deferred) | — | — | — | requires model-weight download |
+| `fewshot_semantic_5` | 0.2000 | **+0.2000** | [+0.067, +0.367] | 0.001 | significantly better |
+
+All seven variants now run end-to-end in this environment. The semantic
+variant uses the preferred `sentence-transformers/all-MiniLM-L6-v2`
+embedder when HuggingFace Hub is reachable, and auto-falls-back to a
+scikit-learn `TfidfVectorizer` (via `SemanticRetriever.backend == "tfidf"`)
+when it isn't — which covers both air-gapped deploys and the mock-backend
+CI path. Retrieval quality drops with the fallback; the code path is the
+same.
 
 On the real Llama-3.2-1B-Instruct model the expected ordering is (based on
 the published literature and the problem-statement hint):
@@ -177,8 +185,9 @@ the decision annotation.
 2. The 30-example evaluation size keeps CIs wide (±0.15 on the difference).
    Running against 500+ examples will narrow the CI substantially and is
    the right size for a final report.
-3. `fewshot_semantic_5` requires a one-time ~80 MB download of the
-   sentence-transformer weights; we defer running it here because the
-   session's network link makes that slow. The code path is exercised in
-   `tests/improve/test_optimize_prompt.py` (`SemanticRetriever.topk` with
-   mocked embeddings).
+3. `fewshot_semantic_5` prefers `sentence-transformers/all-MiniLM-L6-v2`
+   when HuggingFace Hub is reachable and falls back to a scikit-learn
+   `TfidfVectorizer` otherwise. The fallback's retrieval quality is
+   meaningfully lower than dense embeddings — for a headline real-run
+   number you want the sentence-transformer backend. Check
+   `SemanticRetriever.backend` in the run logs to confirm which one ran.

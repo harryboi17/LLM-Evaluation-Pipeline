@@ -40,6 +40,10 @@ class Settings(BaseSettings):
         vllm_download_dir: Override the HuggingFace download cache directory.
         cache_dir: Directory for the SQLite prompt cache and other on-disk state.
         results_dir: Directory for benchmark outputs.
+        cache_version: Opaque version string mixed into every prompt-cache key.
+            Bump it via ``LLMEVAL_CACHE_VERSION`` to invalidate all cached
+            completions when the serving config (dtype, max_model_len, vLLM
+            version) changes in a way the model field alone doesn't capture.
         log_level: ``structlog`` / stdlib log level (``INFO`` by default).
         log_format: ``console`` for dev, ``json`` for machine-readable logs.
         seed: RNG seed used across all deterministic code paths.
@@ -75,6 +79,9 @@ class Settings(BaseSettings):
     # --- Paths ---
     cache_dir: Path = Field(default_factory=lambda: Path(".cache"))
     results_dir: Path = Field(default_factory=lambda: Path("results"))
+
+    # --- Cache tuning ---
+    cache_version: str = "v1"
 
     # --- Logging ---
     log_level: str = "INFO"

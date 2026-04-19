@@ -13,8 +13,8 @@ explains the story behind them.
 
 
 ## baseline — hellaswag
-- **When:** 2026-04-19T17:26+00:00
-- **Commit:** `035bba6`
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 30 / 42
 - **Model:** `mock/test-1b` (mock_backend=True)
 - **Accuracy:** 0.0000
@@ -23,11 +23,11 @@ explains the story behind them.
 - **Two-sided p-value:** n/a (baseline)
 - **Significance:** n/a (baseline)
 - **Wall time:** 0.3s
-- **Notes:** baseline; default prompt + raw sum logprob
+- **Notes:** baseline ablation
 
 ## length_norm — hellaswag
-- **When:** 2026-04-19T17:26+00:00
-- **Commit:** `035bba6`
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 30 / 42
 - **Model:** `mock/test-1b` (mock_backend=True)
 - **Accuracy:** 0.2000
@@ -39,8 +39,8 @@ explains the story behind them.
 - **Notes:** length_norm ablation
 
 ## byte_norm — hellaswag
-- **When:** 2026-04-19T17:26+00:00
-- **Commit:** `035bba6`
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 30 / 42
 - **Model:** `mock/test-1b` (mock_backend=True)
 - **Accuracy:** 0.0000
@@ -52,8 +52,8 @@ explains the story behind them.
 - **Notes:** byte_norm ablation
 
 ## clean_prompt — hellaswag
-- **When:** 2026-04-19T17:26+00:00
-- **Commit:** `035bba6`
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 30 / 42
 - **Model:** `mock/test-1b` (mock_backend=True)
 - **Accuracy:** 0.0000
@@ -65,8 +65,8 @@ explains the story behind them.
 - **Notes:** clean_prompt ablation
 
 ## clean_length_norm — hellaswag
-- **When:** 2026-04-19T17:26+00:00
-- **Commit:** `035bba6`
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 30 / 42
 - **Model:** `mock/test-1b` (mock_backend=True)
 - **Accuracy:** 0.2000
@@ -78,8 +78,8 @@ explains the story behind them.
 - **Notes:** clean_length_norm ablation
 
 ## fewshot_random_5 — hellaswag
-- **When:** 2026-04-19T17:26+00:00
-- **Commit:** `035bba6`
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 30 / 42
 - **Model:** `mock/test-1b` (mock_backend=True)
 - **Accuracy:** 0.2000
@@ -87,66 +87,27 @@ explains the story behind them.
 - **95% CI (paired bootstrap, 10k):** [+0.0667, +0.3667]
 - **Two-sided p-value:** 0.0010
 - **Significance:** significantly better (95% CI > 0)
-- **Wall time:** 0.7s
+- **Wall time:** 0.8s
 - **Notes:** fewshot_random_5 ablation
 
-## baseline — hellaswag
-- **When:** 2026-04-19T17:28+00:00
-- **Commit:** `035bba6`
-- **Task / limit / seed:** hellaswag / 3 / 42
-- **Model:** `mock/test-model` (mock_backend=True)
-- **Accuracy:** 0.3333
-- **Delta vs baseline:** n/a (baseline)
-- **95% CI (paired bootstrap, 10k):** n/a (baseline)
-- **Two-sided p-value:** n/a (baseline)
-- **Significance:** n/a (baseline)
-- **Wall time:** 0.1s
-- **Notes:** (none)
-
-## length_norm — hellaswag
-- **When:** 2026-04-19T17:28+00:00
-- **Commit:** `035bba6`
-- **Task / limit / seed:** hellaswag / 3 / 42
-- **Model:** `mock/test-model` (mock_backend=True)
-- **Accuracy:** 0.3333
-- **Delta vs baseline:** +0.0000
-- **95% CI (paired bootstrap, 10k):** [-1.0000, +1.0000]
-- **Two-sided p-value:** 1.0000
-- **Significance:** not significant (95% CI includes 0)
-- **Wall time:** 0.0s
-- **Notes:** length-normalised scoring
+## fewshot_semantic_5 — hellaswag
+- **When:** 2026-04-19T20:19+00:00
+- **Commit:** `c1f8fa0`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.2000
+- **Delta vs baseline:** +0.2000
+- **95% CI (paired bootstrap, 10k):** [+0.0667, +0.3667]
+- **Two-sided p-value:** 0.0010
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 1.5s
+- **Notes:** fewshot_semantic_5 ablation
 
 ## baseline — hellaswag
-- **When:** 2026-04-19T17:30+00:00
-- **Commit:** `d3e6403`
+- **When:** 2026-04-19T20:20+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 3 / 42
 - **Model:** `mock/test-model` (mock_backend=True)
-- **Accuracy:** 0.3333
-- **Delta vs baseline:** n/a (baseline)
-- **95% CI (paired bootstrap, 10k):** n/a (baseline)
-- **Two-sided p-value:** n/a (baseline)
-- **Significance:** n/a (baseline)
-- **Wall time:** 0.1s
-- **Notes:** (none)
-
-## length_norm — hellaswag
-- **When:** 2026-04-19T17:30+00:00
-- **Commit:** `d3e6403`
-- **Task / limit / seed:** hellaswag / 3 / 42
-- **Model:** `mock/test-model` (mock_backend=True)
-- **Accuracy:** 0.3333
-- **Delta vs baseline:** +0.0000
-- **95% CI (paired bootstrap, 10k):** [-1.0000, +1.0000]
-- **Two-sided p-value:** 1.0000
-- **Significance:** not significant (95% CI includes 0)
-- **Wall time:** 0.0s
-- **Notes:** length-normalised scoring
-
-## baseline — hellaswag
-- **When:** 2026-04-19T17:31+00:00
-- **Commit:** `d3e6403`
-- **Task / limit / seed:** hellaswag / 6 / 42
-- **Model:** `mock/smoke` (mock_backend=True)
 - **Accuracy:** 0.3333
 - **Delta vs baseline:** n/a (baseline)
 - **95% CI (paired bootstrap, 10k):** n/a (baseline)
@@ -156,21 +117,21 @@ explains the story behind them.
 - **Notes:** (none)
 
 ## length_norm — hellaswag
-- **When:** 2026-04-19T17:31+00:00
-- **Commit:** `d3e6403`
-- **Task / limit / seed:** hellaswag / 6 / 42
-- **Model:** `mock/smoke` (mock_backend=True)
+- **When:** 2026-04-19T20:20+00:00
+- **Commit:** `c1f8fa0`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
 - **Accuracy:** 0.3333
 - **Delta vs baseline:** +0.0000
-- **95% CI (paired bootstrap, 10k):** [+0.0000, +0.0000]
+- **95% CI (paired bootstrap, 10k):** [-1.0000, +1.0000]
 - **Two-sided p-value:** 1.0000
 - **Significance:** not significant (95% CI includes 0)
 - **Wall time:** 0.0s
-- **Notes:** (none)
+- **Notes:** length-normalised scoring
 
 ## baseline — hellaswag
-- **When:** 2026-04-19T17:31+00:00
-- **Commit:** `d3e6403`
+- **When:** 2026-04-19T20:20+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 3 / 42
 - **Model:** `mock/test-model` (mock_backend=True)
 - **Accuracy:** 0.3333
@@ -182,8 +143,8 @@ explains the story behind them.
 - **Notes:** (none)
 
 ## length_norm — hellaswag
-- **When:** 2026-04-19T17:31+00:00
-- **Commit:** `d3e6403`
+- **When:** 2026-04-19T20:20+00:00
+- **Commit:** `c1f8fa0`
 - **Task / limit / seed:** hellaswag / 3 / 42
 - **Model:** `mock/test-model` (mock_backend=True)
 - **Accuracy:** 0.3333
@@ -193,3 +154,29 @@ explains the story behind them.
 - **Significance:** not significant (95% CI includes 0)
 - **Wall time:** 0.0s
 - **Notes:** length-normalised scoring
+
+## baseline — hellaswag
+- **When:** 2026-04-19T20:21+00:00
+- **Commit:** `c1f8fa0`
+- **Task / limit / seed:** hellaswag / 6 / 42
+- **Model:** `mock/smoke` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** n/a (baseline)
+- **95% CI (paired bootstrap, 10k):** n/a (baseline)
+- **Two-sided p-value:** n/a (baseline)
+- **Significance:** n/a (baseline)
+- **Wall time:** 0.2s
+- **Notes:** (none)
+
+## length_norm — hellaswag
+- **When:** 2026-04-19T20:21+00:00
+- **Commit:** `c1f8fa0`
+- **Task / limit / seed:** hellaswag / 6 / 42
+- **Model:** `mock/smoke` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** +0.0000
+- **95% CI (paired bootstrap, 10k):** [+0.0000, +0.0000]
+- **Two-sided p-value:** 1.0000
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 0.0s
+- **Notes:** (none)

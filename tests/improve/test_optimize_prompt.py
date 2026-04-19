@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from improve.optimize_prompt import (
@@ -100,3 +102,46 @@ def test_score_logprob_ignores_none_entries() -> None:
 def test_score_logprob_unknown_mode_raises() -> None:
     with pytest.raises(ValueError, match="unknown ScoringMode"):
         score_logprob([-1.0], "x", mode="bogus")  # type: ignore[arg-type]
+
+
+def test_semantic_retriever_tfidf_fallback_under_mock_backend(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Under LLMEVAL_MOCK_BACKEND=true the retriever should use TF-IDF.
+
+    This is the important contract: the fallback must work without any HF
+    network round-trip, return deterministic top-k, and match the query to
+    the most lexically-similar pool entry.
+    """
+    monkeypatch.setenv("LLMEVAL_MOCK_BACKEND", "true")
+    monkeypatch.setenv("LLMEVAL_CACHE_DIR", str(tmp_path / "cache"))
+    from common.config import get_settings
+    from improve.optimize_prompt import FewshotExample, SemanticRetriever
+
+    get_settings.cache_clear()
+
+    pool = [
+        FewshotExample(ctx="A chef slices onions", activity="cooking", endings=["x"], label=0),
+        FewshotExample(ctx="A runner ties shoes", activity="sports", endings=["y"], label=0),
+        FewshotExample(ctx="A scientist writes equations", activity="science", endings=["z"], label=0),
+    ]
+    retriever = SemanticRetriever(pool)
+    result = retriever.topk("A cook chops vegetables in the kitchen", k=1)
+
+    assert retriever.backend == "tfidf"
+    assert len(result) == 1
+    # The cooking example shares "chef/cook + chop/slice + ingredient" with
+    # the query; it should win over the two unrelated entries.
+    assert result[0].activity == "cooking"
+
+
+def test_semantic_retriever_topk_empty_pool_returns_empty(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setenv("LLMEVAL_MOCK_BACKEND", "true")
+    monkeypatch.setenv("LLMEVAL_CACHE_DIR", str(tmp_path / "cache"))
+    from common.config import get_settings
+    from improve.optimize_prompt import SemanticRetriever
+
+    get_settings.cache_clear()
+    assert SemanticRetriever(pool=[]).topk("anything", k=3) == []

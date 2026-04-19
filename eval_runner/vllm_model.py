@@ -46,6 +46,7 @@ from common.cache import PromptCache
 from common.config import get_settings
 from common.errors import EvalError
 from common.logging import get_logger
+from common.tokenization import TokenCounter
 
 if TYPE_CHECKING:
     from lm_eval.api.instance import Instance
@@ -77,47 +78,6 @@ def _lm_eval_base() -> Any:
     return _LM
 
 
-class _WhitespaceTokenizer:
-    """Whitespace-splitting stand-in used when the real HF tokenizer is unavailable.
-
-    Matches the tokenisation used by :func:`common.vllm_client._mock_generation`
-    so the mock backend and the eval layer count tokens the same way.
-    """
-
-    def encode(self, text: str, add_special_tokens: bool = False) -> list[int]:
-        return list(range(len(text.split())))
-
-
-class _TokenCounter:
-    """Adapter that produces token counts using either HF or the whitespace fallback.
-
-    Lazy-loads the HF tokenizer on first real call so the heavy import and
-    the network round-trip to the HF hub only happen when actually needed.
-    """
-
-    def __init__(self, model: str, use_mock: bool) -> None:
-        self._model = model
-        self._use_mock = use_mock
-        self._hf_tokenizer: Any | None = None
-
-    def _ensure(self) -> Any:
-        if self._use_mock:
-            return _WhitespaceTokenizer()
-        if self._hf_tokenizer is None:
-            try:
-                from transformers import AutoTokenizer
-            except ImportError as exc:
-                raise EvalError(
-                    "transformers is not installed. Run `uv sync --extra eval`."
-                ) from exc
-            log.info("loading_hf_tokenizer", model=self._model)
-            self._hf_tokenizer = AutoTokenizer.from_pretrained(self._model)
-        return self._hf_tokenizer
-
-    def count(self, text: str) -> int:
-        return len(self._ensure().encode(text, add_special_tokens=False))
-
-
 def _build_vllm_eval_class() -> type:
     """Build :class:`VLLMEvalModel` subclassing the lm-eval ``LM`` at call time."""
     base = _lm_eval_base()
@@ -144,7 +104,7 @@ def _build_vllm_eval_class() -> type:
             self._max_concurrency: int = max_concurrency
             self._default_max_gen_tokens: int = default_max_gen_tokens
             self._cache: PromptCache = PromptCache()
-            self._token_counter: _TokenCounter = _TokenCounter(
+            self._token_counter: TokenCounter = TokenCounter(
                 self._model, use_mock=settings.mock_backend
             )
 

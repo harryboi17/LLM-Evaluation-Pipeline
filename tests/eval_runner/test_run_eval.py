@@ -78,3 +78,44 @@ def test_main_rejects_empty_task_list(_mock_env: Path) -> None:
 
     with pytest.raises(EvalError, match="at least one task"):
         main(["--task", ","])
+
+
+def test_main_picks_numeric_fallback_for_ppl_style_task(
+    _mock_env: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """PPL-style tasks (wikitext, lambada) emit ``word_perplexity`` metrics.
+
+    These aren't in the run_eval preferred-metric list, so the picker falls
+    back to the first numeric metric. This smoke-tests the
+    ``loglikelihood_rolling`` CLI path end-to-end (the harness plumbing is
+    stubbed) so we know the result-log handles non-accuracy metrics without
+    raising.
+    """
+    fake_results: dict[str, Any] = {
+        "results": {
+            "wikitext": {
+                "word_perplexity,none": 41.2,
+                "byte_perplexity,none": 1.9,
+                "bits_per_byte,none": 0.93,
+                "alias": "wikitext",
+            }
+        },
+    }
+
+    with patch("eval_runner.run_eval._run_harness", return_value=fake_results):
+        rc = main(["--task", "wikitext", "--limit", "10", "--method", "ppl_smoke"])
+
+    assert rc == 0
+    captured = capsys.readouterr()
+    assert "wikitext" in captured.err
+
+    from common.result_log import read_results
+
+    rows = read_results()
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["task"] == "wikitext"
+    assert row["method"] == "ppl_smoke"
+    # The first numeric key under "wikitext" should be recorded as the metric.
+    assert row["metric"] == "word_perplexity,none"
+    assert float(row["value"]) == pytest.approx(41.2)

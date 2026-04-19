@@ -64,3 +64,24 @@ def test_corrupt_entry_raises_cache_error(cache: PromptCache, tmp_path: Path) ->
         conn.commit()
     with pytest.raises(CacheError):
         cache.get("m", "p", {})
+
+
+def test_cache_version_bump_invalidates_entries(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Bumping ``LLMEVAL_CACHE_VERSION`` should miss previously cached rows."""
+    from common.config import get_settings
+
+    monkeypatch.setenv("LLMEVAL_CACHE_VERSION", "v1")
+    get_settings.cache_clear()
+    cache = PromptCache(path=tmp_path / "cv.sqlite")
+    cache.put("m", "p", {"t": 0.0}, {"text": "from-v1"})
+    assert cache.get("m", "p", {"t": 0.0}) == {"text": "from-v1"}
+
+    # Bump version; the old row is still physically present, but the key
+    # computed under v2 is different, so the lookup misses cleanly.
+    monkeypatch.setenv("LLMEVAL_CACHE_VERSION", "v2")
+    get_settings.cache_clear()
+    assert cache.get("m", "p", {"t": 0.0}) is None
+    # The row is still there — size unchanged.
+    assert cache.size() == 1

@@ -100,9 +100,11 @@ ignore = [
 "tests/**/*" = ["PLR2004", "S101", "N802", "PLC0415"]
 "scripts/**/*" = ["PLR2004"]
 "**/*.ipynb" = ["E402", "F401"]
-# eval_runner / improve deliberately lazy-import heavy optional deps
-# (lm-eval, transformers, datasets, sentence-transformers) so the modules
-# stay importable without the relevant extra installed.
+# eval_runner / improve / common.tokenization deliberately lazy-import
+# heavy optional deps (lm-eval, transformers, datasets,
+# sentence-transformers) so the modules stay importable without the
+# relevant extra installed.
+"common/tokenization.py" = ["PLC0415"]
 "eval_runner/vllm_model.py" = ["PLC0415"]
 "eval_runner/run_eval.py" = ["PLC0415"]
 "improve/vllm_model.py" = ["PLC0415"]
