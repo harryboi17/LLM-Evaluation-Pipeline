@@ -44,7 +44,7 @@ def test_main_writes_outputs_when_harness_succeeds(
     }
 
     with patch("eval_runner.run_eval._run_harness", return_value=fake_results):
-        rc = main(["--task", "custom_qa", "--limit", "5"])
+        rc = main(["--task", "custom_qa", "--limit", "5", "--method", "pipeline_smoke"])
 
     assert rc == 0
     results_dir = _mock_env / "results"
@@ -59,8 +59,18 @@ def test_main_writes_outputs_when_harness_succeeds(
     assert run_meta["tasks"] == ["custom_qa"]
     assert run_meta["limit"] == 5
     assert run_meta["mock_backend"] is True
+    assert run_meta["method"] == "pipeline_smoke"
     # stderr should also carry the run summary for log aggregation (rule 28).
     assert "eval_run" in capsys.readouterr().err
+
+    # New: the result-log must have grown by one row with the method label.
+    from common.result_log import read_results
+
+    rows = read_results()
+    assert len(rows) == 1
+    assert rows[0]["method"] == "pipeline_smoke"
+    assert rows[0]["task"] == "custom_qa"
+    assert float(rows[0]["value"]) == pytest.approx(0.42)
 
 
 def test_main_rejects_empty_task_list(_mock_env: Path) -> None:

@@ -40,6 +40,7 @@ import yaml
 from common.config import get_settings
 from common.errors import EvalError
 from common.logging import get_logger
+from common.result_log import ResultLogEntry, log_result
 
 log = get_logger(__name__)
 
@@ -89,6 +90,16 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=8,
         dest="max_concurrency",
         help="Max concurrent in-flight vLLM requests.",
+    )
+    p.add_argument(
+        "--method",
+        default="baseline",
+        help="Free-text label for this run in result-log.csv (e.g. 'baseline', 'clean_prompt').",
+    )
+    p.add_argument(
+        "--notes",
+        default="",
+        help="Free-text notes attached to every result-log row in this run.",
     )
     return p.parse_args(argv)
 
@@ -220,6 +231,80 @@ def _write_outputs(
     log.info("eval_outputs_written", dir=str(output_dir))
 
 
+_DEFAULT_METRIC_PREFERENCE: tuple[str, ...] = (
+    "acc_norm,none",
+    "acc,none",
+    "exact_match,exact_match",
+    "exact_match,none",
+    "acc_norm",
+    "acc",
+    "exact_match",
+)
+_DEFAULT_STDERR_PREFERENCE: tuple[str, ...] = (
+    "acc_norm_stderr,none",
+    "acc_stderr,none",
+    "exact_match_stderr,exact_match",
+    "exact_match_stderr,none",
+    "acc_norm_stderr",
+    "acc_stderr",
+    "exact_match_stderr",
+)
+
+
+def _pick_primary_metric(metrics: dict[str, Any]) -> tuple[str, float, float | None]:
+    """Return ``(metric_name, value, stderr)`` for a task's metrics dict.
+
+    Tries a fixed preference list (matches lm-eval's naming quirks) and falls
+    back to the first numeric metric. Returns ``(metric, value, stderr or None)``.
+    """
+    for name in _DEFAULT_METRIC_PREFERENCE:
+        if name in metrics and isinstance(metrics[name], int | float):
+            stderr: float | None = None
+            for sname in _DEFAULT_STDERR_PREFERENCE:
+                if sname in metrics and isinstance(metrics[sname], int | float):
+                    stderr = float(metrics[sname])
+                    break
+            return (name, float(metrics[name]), stderr)
+    for name, v in metrics.items():
+        if isinstance(v, int | float):
+            return (name, float(v), None)
+    raise EvalError(f"no numeric metric in {metrics!r}")
+
+
+def _append_to_result_log(
+    tasks: list[str],
+    per_task: dict[str, dict[str, Any]],
+    run_meta: dict[str, Any],
+    method_label: str,
+    notes: str,
+) -> None:
+    """Append one row per task to ``result-log.csv`` / ``result-log.md``."""
+    for task in tasks:
+        if task not in per_task:
+            continue
+        try:
+            metric_name, value, stderr = _pick_primary_metric(per_task[task])
+        except EvalError as exc:
+            log.warning("result_log_skip", task=task, reason=str(exc))
+            continue
+        log_result(
+            ResultLogEntry(
+                model=str(run_meta["model"]),
+                task=task,
+                method=method_label,
+                metric=metric_name,
+                value=value,
+                seed=int(run_meta["seed"]),
+                limit=run_meta.get("limit"),
+                num_fewshot=run_meta.get("num_fewshot"),
+                stderr=stderr,
+                wall_s=float(run_meta["duration_s"]),
+                mock_backend=bool(run_meta["mock_backend"]),
+                notes=notes,
+            )
+        )
+
+
 def main(argv: list[str] | None = None) -> int:
     """Entry point for ``python -m eval_runner.run_eval``.
 
@@ -253,8 +338,17 @@ def main(argv: list[str] | None = None) -> int:
         "max_concurrency": args.max_concurrency,
         "mock_backend": settings.mock_backend,
         "duration_s": duration_s,
+        "method": args.method,
+        "notes": args.notes,
     }
     _write_outputs(results, tasks, output_dir, run_meta)
+    _append_to_result_log(
+        tasks,
+        results.get("results", {}),
+        run_meta,
+        method_label=args.method,
+        notes=args.notes,
+    )
 
     sys.stderr.write(json.dumps({"eval_run": run_meta}, default=str) + "\n")
     log.info("eval_complete", **run_meta)
