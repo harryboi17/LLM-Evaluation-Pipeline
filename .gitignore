@@ -1,0 +1,74 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# ---- Virtual envs ----
+.venv/
+venv/
+env/
+.python-version.local
+
+# ---- Tooling caches ----
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# ---- Notebooks ----
+.ipynb_checkpoints/
+**/*.ipynb_checkpoints/
+# Notebook outputs are stripped before commit; raw outputs ignored.
+*.nbconvert.ipynb
+
+# ---- Project artifacts ----
+.cache/
+results/raw/
+results/tmp/
+# Committed: metrics.csv, results/summary.md, results/<task>.json
+
+# ---- Env / secrets ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- Logs ----
+logs/
+*.log
+
+# ---- Editors / OS ----
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ---- HuggingFace / model caches (large) ----
+.hf_cache/
+.transformers_cache/
+hf_home/
+models/
+
+# ---- vLLM / CUDA ----
+*.engine
+vllm.log
+
+# ---- detect-secrets baseline (committed) ----
+# .secrets.baseline is kept
