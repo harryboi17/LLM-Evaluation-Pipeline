@@ -35,6 +35,7 @@ import argparse
 import asyncio
 import datetime as dt
 import json
+import os
 import random
 import sys
 import time
@@ -511,7 +512,16 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     # --- improvement log ------------------------------------------------------
-    improve_log_path = Path(__file__).parent.parent / "docs" / "improvement-log.md"
+    # By default the chronological journal lives at docs/improvement-log.md in
+    # the repo, which is exactly the file reviewers read. Tests (and any
+    # sandboxed run) should not pollute it; they override via
+    # $LLMEVAL_IMPROVEMENT_LOG_PATH so the write goes to a tmp path instead.
+    improve_log_path = Path(
+        os.environ.get(
+            "LLMEVAL_IMPROVEMENT_LOG_PATH",
+            str(Path(__file__).parent.parent / "docs" / "improvement-log.md"),
+        )
+    )
     _append_improvement_log(
         improve_log_path,
         args.variant,

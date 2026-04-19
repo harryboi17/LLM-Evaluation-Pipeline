@@ -16,6 +16,8 @@ def _mock_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
     monkeypatch.setenv("LLMEVAL_CACHE_DIR", str(tmp_path / "cache"))
     monkeypatch.setenv("LLMEVAL_RESULTS_DIR", str(tmp_path / "results"))
     monkeypatch.setenv("LLMEVAL_MODEL_NAME", "mock/test-model")
+    # Don't pollute the real docs/improvement-log.md during tests.
+    monkeypatch.setenv("LLMEVAL_IMPROVEMENT_LOG_PATH", str(tmp_path / "improvement-log.md"))
     get_settings.cache_clear()
     return tmp_path
 
