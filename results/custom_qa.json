@@ -1,0 +1,5 @@
+{
+  "alias": "custom_qa",
+  "exact_match,exact_match": 0.56,
+  "exact_match_stderr,exact_match": 0.07091242083423345
+}

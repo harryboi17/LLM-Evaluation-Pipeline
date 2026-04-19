@@ -1,0 +1,13 @@
+{
+  "prompt": "The capital of France is",
+  "n_runs": 5,
+  "identical": true,
+  "first_divergence_at": null,
+  "completions": [
+    " Paris. The capital of Italy is Rome. What is the capital of Spain?\n",
+    " Paris. The capital of Italy is Rome. What is the capital of Spain?\n",
+    " Paris. The capital of Italy is Rome. What is the capital of Spain?\n",
+    " Paris. The capital of Italy is Rome. What is the capital of Spain?\n",
+    " Paris. The capital of Italy is Rome. What is the capital of Spain?\n"
+  ]
+}

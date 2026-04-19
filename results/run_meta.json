@@ -1,0 +1,16 @@
+{
+  "duration_s": 645.4439298540001,
+  "limit": 200,
+  "max_concurrency": 16,
+  "method": "real_gpu_Qwen/Qwen2.5-1.5B-Instruct",
+  "mock_backend": false,
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "notes": "one-shot Colab run on T4",
+  "num_fewshot": null,
+  "seed": 42,
+  "tasks": [
+    "mmlu_stem",
+    "hellaswag",
+    "custom_qa"
+  ]
+}
