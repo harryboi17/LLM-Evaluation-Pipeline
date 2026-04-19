@@ -9,24 +9,109 @@ Every row should also exist in `results/result-log.csv` with the matching
 `run_id`. The result log is the source of truth for numbers; this file
 explains the story behind them.
 
-## Template
-
-```
-## <run_id> — <short title>
-- **Date:** YYYY-MM-DDTHH:MMZ
-- **Commit:** <short sha>
-- **Task / limit / seed:** <task> / <limit> / <seed>
-- **Hypothesis:** what I thought would help, and why
-- **Change:** exact flags / files changed
-- **Config:** model, decoding params, prompt template version
-- **Result:** metric value and (if not baseline) delta vs last baseline
-- **95% CI (vs baseline):** from paired bootstrap, 10k resamples
-- **Decision:** keep / revert / iterate, with one-line rationale
-```
-
 ## Entries
 
-_Runs are appended below in chronological order. The first entry is always a
-baseline establishing the starting point._
 
-<!-- Part E entries start here; keep this comment so the file stays parseable. -->
+## baseline — hellaswag
+- **When:** 2026-04-19T17:26+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.0000
+- **Delta vs baseline:** n/a (baseline)
+- **95% CI (paired bootstrap, 10k):** n/a (baseline)
+- **Two-sided p-value:** n/a (baseline)
+- **Significance:** n/a (baseline)
+- **Wall time:** 0.3s
+- **Notes:** baseline; default prompt + raw sum logprob
+
+## length_norm — hellaswag
+- **When:** 2026-04-19T17:26+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.2000
+- **Delta vs baseline:** +0.2000
+- **95% CI (paired bootstrap, 10k):** [+0.0667, +0.3667]
+- **Two-sided p-value:** 0.0010
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 0.0s
+- **Notes:** length_norm ablation
+
+## byte_norm — hellaswag
+- **When:** 2026-04-19T17:26+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.0000
+- **Delta vs baseline:** +0.0000
+- **95% CI (paired bootstrap, 10k):** [+0.0000, +0.0000]
+- **Two-sided p-value:** 1.0000
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 0.0s
+- **Notes:** byte_norm ablation
+
+## clean_prompt — hellaswag
+- **When:** 2026-04-19T17:26+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.0000
+- **Delta vs baseline:** +0.0000
+- **95% CI (paired bootstrap, 10k):** [+0.0000, +0.0000]
+- **Two-sided p-value:** 1.0000
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 0.4s
+- **Notes:** clean_prompt ablation
+
+## clean_length_norm — hellaswag
+- **When:** 2026-04-19T17:26+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.2000
+- **Delta vs baseline:** +0.2000
+- **95% CI (paired bootstrap, 10k):** [+0.0667, +0.3667]
+- **Two-sided p-value:** 0.0010
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 0.1s
+- **Notes:** clean_length_norm ablation
+
+## fewshot_random_5 — hellaswag
+- **When:** 2026-04-19T17:26+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 30 / 42
+- **Model:** `mock/test-1b` (mock_backend=True)
+- **Accuracy:** 0.2000
+- **Delta vs baseline:** +0.2000
+- **95% CI (paired bootstrap, 10k):** [+0.0667, +0.3667]
+- **Two-sided p-value:** 0.0010
+- **Significance:** significantly better (95% CI > 0)
+- **Wall time:** 0.7s
+- **Notes:** fewshot_random_5 ablation
+
+## baseline — hellaswag
+- **When:** 2026-04-19T17:28+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** n/a (baseline)
+- **95% CI (paired bootstrap, 10k):** n/a (baseline)
+- **Two-sided p-value:** n/a (baseline)
+- **Significance:** n/a (baseline)
+- **Wall time:** 0.1s
+- **Notes:** (none)
+
+## length_norm — hellaswag
+- **When:** 2026-04-19T17:28+00:00
+- **Commit:** `035bba6`
+- **Task / limit / seed:** hellaswag / 3 / 42
+- **Model:** `mock/test-model` (mock_backend=True)
+- **Accuracy:** 0.3333
+- **Delta vs baseline:** +0.0000
+- **95% CI (paired bootstrap, 10k):** [-1.0000, +1.0000]
+- **Two-sided p-value:** 1.0000
+- **Significance:** not significant (95% CI includes 0)
+- **Wall time:** 0.0s
+- **Notes:** length-normalised scoring

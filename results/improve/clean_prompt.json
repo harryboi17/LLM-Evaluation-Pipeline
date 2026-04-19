@@ -1,0 +1,399 @@
+{
+  "variant": "clean_prompt",
+  "n": 30,
+  "accuracy": 0.0,
+  "correct_per_example": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "per_example": [
+    {
+      "ind": "syn-0",
+      "label": 2,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-1",
+      "label": 3,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -5.0,
+        -7.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-2",
+      "label": 3,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -7.0,
+        -6.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-3",
+      "label": 0,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -7.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-4",
+      "label": 2,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-5",
+      "label": 2,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-6",
+      "label": 3,
+      "predicted": 2,
+      "correct": false,
+      "scores": [
+        -7.0,
+        -6.0,
+        -5.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-7",
+      "label": 2,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -5.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-8",
+      "label": 2,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -7.0,
+        -5.0,
+        -6.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-9",
+      "label": 1,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -7.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-10",
+      "label": 2,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-11",
+      "label": 0,
+      "predicted": 2,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -5.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-12",
+      "label": 2,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -5.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-13",
+      "label": 2,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -7.0,
+        -6.0,
+        -6.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-14",
+      "label": 0,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -7.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-15",
+      "label": 3,
+      "predicted": 2,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -7.0,
+        -5.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-16",
+      "label": 0,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -7.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-17",
+      "label": 0,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -5.0,
+        -7.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-18",
+      "label": 2,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -7.0,
+        -6.0,
+        -6.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-19",
+      "label": 1,
+      "predicted": 2,
+      "correct": false,
+      "scores": [
+        -7.0,
+        -6.0,
+        -5.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-20",
+      "label": 3,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -7.0,
+        -6.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-21",
+      "label": 1,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -7.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-22",
+      "label": 0,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -5.0,
+        -7.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-23",
+      "label": 3,
+      "predicted": 1,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -5.0,
+        -7.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-24",
+      "label": 1,
+      "predicted": 2,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -5.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-25",
+      "label": 1,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-26",
+      "label": 1,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -6.0,
+        -6.0,
+        -7.0
+      ]
+    },
+    {
+      "ind": "syn-27",
+      "label": 1,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -6.0,
+        -7.0,
+        -5.0
+      ]
+    },
+    {
+      "ind": "syn-28",
+      "label": 2,
+      "predicted": 0,
+      "correct": false,
+      "scores": [
+        -5.0,
+        -7.0,
+        -6.0,
+        -6.0
+      ]
+    },
+    {
+      "ind": "syn-29",
+      "label": 2,
+      "predicted": 3,
+      "correct": false,
+      "scores": [
+        -6.0,
+        -7.0,
+        -6.0,
+        -5.0
+      ]
+    }
+  ]
+}
