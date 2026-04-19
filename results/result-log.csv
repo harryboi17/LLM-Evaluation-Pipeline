@@ -9,24 +9,3 @@ run_id,timestamp,commit,model,task,method,limit,num_fewshot,seed,metric,value,st
 8,2026-04-19T22:07:18+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,mmlu_stem,real_gpu_Qwen/Qwen2.5-1.5B-Instruct,200,,42,"acc,none",0.539219,0.009266,,,,645.443930,false,one-shot Colab run on T4
 9,2026-04-19T22:07:18+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,real_gpu_Qwen/Qwen2.5-1.5B-Instruct,200,,42,"acc_norm,none",0.630000,0.034225,,,,645.443930,false,one-shot Colab run on T4
 10,2026-04-19T22:07:18+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,custom_qa,real_gpu_Qwen/Qwen2.5-1.5B-Instruct,200,,42,"exact_match,exact_match",0.560000,0.070912,,,,645.443930,false,one-shot Colab run on T4
-11,2026-04-19T22:08:04+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,baseline,30,,42,acc,0.100000,,,,,10.989210,false,ablation run via improve/eval.sh
-12,2026-04-19T22:08:16+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,length_norm,30,,42,acc,0.566667,,0.466667,0.300000,0.633333,8.618482,false,ablation run via improve/eval.sh
-13,2026-04-19T22:08:26+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,byte_norm,30,,42,acc,0.366667,,0.266667,0.133333,0.433333,7.220718,false,ablation run via improve/eval.sh
-14,2026-04-19T22:08:39+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,clean_prompt,30,,42,acc,0.000000,,-0.100000,-0.200000,0.000000,9.797619,false,ablation run via improve/eval.sh
-15,2026-04-19T22:08:50+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,clean_length_norm,30,,42,acc,0.633333,,0.533333,0.366667,0.700000,6.764114,false,ablation run via improve/eval.sh
-16,2026-04-19T22:09:07+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,fewshot_random_5,30,,42,acc,1.000000,,0.900000,0.800000,1.000000,13.363670,false,ablation run via improve/eval.sh
-17,2026-04-19T22:09:32+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,fewshot_semantic_5,30,,42,acc,1.000000,,0.900000,0.800000,1.000000,21.314505,false,ablation run via improve/eval.sh
-18,2026-04-19T22:48:39+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,baseline,30,,42,acc,0.100000,,,,,6.834970,false,ablation run via improve/eval.sh
-19,2026-04-19T22:48:50+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,length_norm,30,,42,acc,0.566667,,0.466667,0.300000,0.633333,6.827140,false,ablation run via improve/eval.sh
-20,2026-04-19T22:49:01+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,byte_norm,30,,42,acc,0.366667,,0.266667,0.133333,0.433333,7.353762,false,ablation run via improve/eval.sh
-21,2026-04-19T22:49:12+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,clean_prompt,30,,42,acc,0.000000,,-0.100000,-0.200000,0.000000,7.926679,false,ablation run via improve/eval.sh
-22,2026-04-19T22:49:23+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,clean_length_norm,30,,42,acc,0.633333,,0.533333,0.366667,0.700000,7.838644,false,ablation run via improve/eval.sh
-23,2026-04-19T22:49:33+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,fewshot_random_5,30,,42,acc,1.000000,,0.900000,0.800000,1.000000,7.026917,false,ablation run via improve/eval.sh
-24,2026-04-19T22:49:48+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,fewshot_semantic_5,30,,42,acc,1.000000,,0.900000,0.800000,1.000000,11.713745,false,ablation run via improve/eval.sh
-25,2026-04-19T23:03:38+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,baseline,30,,42,acc,0.100000,,,,,6.910625,false,ablation run via improve/eval.sh
-26,2026-04-19T23:03:49+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,length_norm,30,,42,acc,0.566667,,0.466667,0.300000,0.633333,6.726486,false,ablation run via improve/eval.sh
-27,2026-04-19T23:04:00+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,byte_norm,30,,42,acc,0.366667,,0.266667,0.133333,0.433333,7.596681,false,ablation run via improve/eval.sh
-28,2026-04-19T23:04:11+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,clean_prompt,30,,42,acc,0.000000,,-0.100000,-0.200000,0.000000,8.110560,false,ablation run via improve/eval.sh
-29,2026-04-19T23:04:21+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,clean_length_norm,30,,42,acc,0.633333,,0.533333,0.366667,0.700000,7.323806,false,ablation run via improve/eval.sh
-30,2026-04-19T23:04:31+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,fewshot_random_5,30,,42,acc,1.000000,,0.900000,0.800000,1.000000,6.769597,false,ablation run via improve/eval.sh
-31,2026-04-19T23:04:47+00:00,ab32e50,Qwen/Qwen2.5-1.5B-Instruct,hellaswag,fewshot_semantic_5,30,,42,acc,1.000000,,0.900000,0.800000,1.000000,12.159862,false,ablation run via improve/eval.sh
